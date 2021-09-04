@@ -1,0 +1,41 @@
+{
+  "name": "solidity-docs-cn",
+  "version": "1.0.0",
+  "description": "Solidity中文开发文档",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "serve": "http-server _build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zlq4863947/solidity-docs-cn.git"
+  },
+  "keywords": [
+    "solidaty",
+    "solidaty develop doc",
+    "solidaty develop docs",
+    "solidaty api",
+    "solidaty cn docs",
+    "solidaty chinese docs",
+    "crypto",
+    "blockchain",
+    "blockchain develop doc",
+    "blockchain develop docs",
+    "blockchain api",
+    "solidaty chinese docs",
+    "eth",
+    "ether",
+    "ethereum",
+    "solidaty 开发文档",
+    "solidaty 中文开发文档"
+  ],
+  "author": "zlq4863947@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zlq4863947/solidity-docs-cn/issues"
+  },
+  "homepage": "https://github.com/zlq4863947/solidity-docs-cn#readme"
+}

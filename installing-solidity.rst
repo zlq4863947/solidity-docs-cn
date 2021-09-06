@@ -3,22 +3,20 @@
 .. _installing-solidity:
 
 ################################
-Installing the Solidity Compiler
+安装 Solidity 编译器
 ################################
 
-Versioning
+版本控制
 ==========
 
-Solidity versions follow `semantic versioning <https://semver.org>`_ and in addition to
-releases, **nightly development builds** are also made available.  The nightly builds
-are not guaranteed to be working and despite best efforts they might contain undocumented
-and/or broken changes. We recommend using the latest release. Package installers below
-will use the latest release.
+Solidity 版本遵循`语义版本控制 <https://semver.org>`_ 并且除了发布之外，还提供 **每日开发构建**。
+
+不保证每日构建都能正常工作，尽管尽了最大努力，它们仍可能包含未记录和/或损坏的更改。我们建议使用最新发布的版本。下面的软件包安装程序将使用最新版本。
 
 Remix
 =====
 
-*We recommend Remix for small contracts and for quickly learning Solidity.*
+*我们推荐 Remix 用于小型合约和快速学习 Solidity。*
 
 `Access Remix online <https://remix.ethereum.org/>`_, you do not need to install anything.
 If you want to use it without connection to the Internet, go to
@@ -51,7 +49,7 @@ Please refer to the solc-js repository for instructions.
 
     npm install -g solc
 
-.. note::
+.. 注解::
 
     The commandline executable is named ``solcjs``.
 
@@ -133,7 +131,7 @@ with the most recent changes, please use the following:
 
     sudo snap install solc --edge
 
-.. note::
+.. 注解::
 
     The ``solc`` snap uses strict confinement. This is the most secure mode for snap packages
     but it comes with limitations, like accessing only the files in your ``/home`` and ``/media`` directories.
@@ -256,7 +254,7 @@ This means that:
 - You can also verify the integrity of the binary by comparing its sha256 hash to
   ``0x2b55ed5fec4d9625b6c7b3ab1abd2b7fb7dd2a9c68543bf0323db2c7e2d55af2``.
 
-.. warning::
+.. 警告::
 
    Due to the strong backwards compatibility requirement the repository contains some legacy elements
    but you should avoid using them when writing new tools:
@@ -275,7 +273,7 @@ This means that:
      domain and this applies to ``solc-bin`` too. While the new domain is recommended, the old one
      is still fully supported and guaranteed to point at the same location.
 
-.. warning::
+.. 警告::
 
     The binaries are also available at https://ethereum.github.io/solc-bin/ but this page
     stopped being updated just after the release of version 0.7.2, will not receive any new releases
@@ -328,7 +326,7 @@ The following are dependencies for all builds of Solidity:
 .. _CMake: https://cmake.org/download/
 .. _z3: https://github.com/Z3Prover/z3
 
-.. note::
+.. 注解::
     Solidity versions prior to 0.5.10 can fail to correctly link against Boost versions 1.70+.
     A possible workaround is to temporarily rename ``<Boost install path>/lib/cmake/Boost-1.70.0``
     prior to running the cmake command to configure solidity.
@@ -434,7 +432,7 @@ you should fork Solidity and add your personal fork as a second remote:
 
     git remote add personal git@github.com:[username]/solidity.git
 
-.. note::
+.. 注解::
     This method will result in a prerelease build leading to e.g. a flag
     being set in each bytecode produced by such a compiler.
     If you want to re-build a released Solidity compiler, then
@@ -469,7 +467,7 @@ or even easier on Linux and macOS, you can run:
     #note: this will install binaries solc and soltest at usr/local/bin
     ./scripts/build.sh
 
-.. warning::
+.. 警告::
 
     BSD builds should work, but are untested by the Solidity team.
 

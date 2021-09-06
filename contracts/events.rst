@@ -65,7 +65,7 @@ only filter by the contract address. The advantage of anonymous events
 is that they are cheaper to deploy and call. It also allows you to declare
 four indexed arguments rather than three.
 
-.. note::
+.. 注解::
     Since the transaction log only stores the event data and not the type,
     you have to know the type of the event, including which parameter is
     indexed and if the event is anonymous in order to correctly interpret

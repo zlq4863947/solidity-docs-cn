@@ -74,7 +74,7 @@ as the actual contract has not been created yet.
 Functions of other contracts have to be called externally. For an external call,
 all function arguments have to be copied to memory.
 
-.. note::
+.. 注解::
     A function call from one contract to another does not create its own transaction,
     it is a message call as part of the overall transaction.
 
@@ -102,7 +102,7 @@ to the total balance of that contract:
 You need to use the modifier ``payable`` with the ``info`` function because
 otherwise, the ``value`` option would not be available.
 
-.. warning::
+.. 警告::
   Be careful that ``feed.info{value: 10, gas: 800}`` only locally sets the
   ``value`` and amount of ``gas`` sent with the function call, and the
   parentheses at the end perform the actual call. So
@@ -120,7 +120,7 @@ operate on addresses rather than contract instances.
 Function calls also cause exceptions if the called contract itself
 throws an exception or goes out of gas.
 
-.. warning::
+.. 警告::
     Any interaction with another contract imposes a potential danger, especially
     if the source code of the contract is not known in advance. The
     current contract hands over control to the called contract and that may potentially
@@ -135,7 +135,7 @@ throws an exception or goes out of gas.
     external functions happen after any changes to state variables in your contract
     so your contract is not vulnerable to a reentrancy exploit.
 
-.. note::
+.. 注解::
     Before Solidity 0.6.2, the recommended way to specify the value and gas was to
     use ``f.value(x).gas(g)()``. This was deprecated in Solidity 0.6.2 and is no
     longer possible since Solidity 0.7.0.
@@ -282,7 +282,7 @@ which only need to be created if there is a dispute.
         }
     }
 
-.. warning::
+.. 警告::
     There are some peculiarities in relation to salted creation. A contract can be
     re-created at the same address after having been destroyed. Yet, it is possible
     for that newly created contract to have a different deployed bytecode even
@@ -346,12 +346,12 @@ groupings of expressions.
 It is not possible to mix variable declarations and non-declaration assignments,
 i.e. the following is not valid: ``(x, uint y) = (1, 2);``
 
-.. note::
+.. 注解::
     Prior to version 0.5.0 it was possible to assign to tuples of smaller size, either
     filling up on the left or on the right side (which ever was empty). This is
     now disallowed, so both sides have to have the same number of components.
 
-.. warning::
+.. 警告::
     Be careful when assigning to multiple variables at the same time when
     reference types are involved, because it could lead to unexpected
     copying behaviour.
@@ -463,7 +463,7 @@ In any case, you will get a warning about the outer variable being shadowed.
         }
     }
 
-.. warning::
+.. 警告::
     Before version 0.5.0 Solidity followed the same scoping rules as
     JavaScript, that is, a variable declared anywhere within a function would be in scope
     for the entire function, regardless where it was declared. The following example shows a code snippet that used
@@ -525,7 +525,7 @@ for a block. It also cannot be nested.
 The setting only affects the statements that are syntactically inside the block.
 Functions called from within an ``unchecked`` block do not inherit the property.
 
-.. note::
+.. 注解::
     To avoid ambiguity, you cannot use ``_;`` inside an ``unchecked`` block.
 
 The following operators will cause a failing assertion on overflow or underflow
@@ -535,17 +535,17 @@ and will wrap without an error if used inside an unchecked block:
 
 ``+=``, ``-=``, ``*=``, ``/=``, ``%=``
 
-.. warning::
+.. 警告::
     It is not possible to disable the check for division by zero
     or modulo by zero using the ``unchecked`` block.
 
-.. note::
+.. 注解::
    Bitwise operators do not perform overflow or underflow checks.
    This is particularly visible when using bitwise shifts (``<<``, ``>>``, ``<<=``, ``>>=``) in
    place of integer division and multiplication by a power of 2.
    For example ``type(uint256).max << 3`` does not revert even though ``type(uint256).max * 8`` would.
 
-.. note::
+.. 注解::
     The second statement in ``int x = type(int).min; -x;`` will result in an overflow
     because the negative range can hold one more value than the positive range.
 
@@ -571,7 +571,7 @@ and the low-level functions ``call``, ``delegatecall`` and
 ``staticcall``: they return ``false`` as their first return value in case
 of an exception instead of "bubbling up".
 
-.. warning::
+.. 警告::
     The low-level functions ``call``, ``delegatecall`` and
     ``staticcall`` return ``true`` as their first return value
     if the account called is non-existent, as part of the design
@@ -621,7 +621,7 @@ that cannot be detected until execution time.
 This includes conditions on inputs
 or return values from calls to external contracts.
 
-.. note::
+.. 注解::
 
     It is currently not possible to use custom errors in combination
     with ``require``. Please use ``if (!condition) revert CustomError();`` instead.
@@ -653,7 +653,7 @@ an `Error` or a `Panic` (or whatever else was given):
 
 You can optionally provide a message string for ``require``, but not for ``assert``.
 
-.. note::
+.. 注解::
     If you do not provide a string argument to ``require``, it will revert
     with empty error data, not even including the error selector.
 
@@ -691,7 +691,7 @@ safest action is to revert all changes and make the whole transaction
 In both cases, the caller can react on such failures using ``try``/``catch``, but
 the changes in the caller will always be reverted.
 
-.. note::
+.. 注解::
 
     Panic exceptions used to use the ``invalid`` opcode before Solidity 0.8.0,
     which consumed all gas available to the call.
@@ -756,7 +756,7 @@ The two ways ``if (!condition) revert(...);`` and ``require(condition, ...);`` a
 equivalent as long as the arguments to ``revert`` and ``require`` do not have side-effects,
 for example if they are just strings.
 
-.. note::
+.. 注解::
     The ``require`` function is evaluated just as any other function.
     This means that all arguments are evaluated before the function itself is executed.
     In particular, in ``require(condition, f())`` the function ``f`` is executed even if
@@ -774,7 +774,7 @@ In the above example, ``revert("Not enough Ether provided.");`` returns the foll
 
 The provided message can be retrieved by the caller using ``try``/``catch`` as shown below.
 
-.. note::
+.. 注解::
     There used to be a keyword called ``throw`` with the same semantics as ``revert()`` which
     was deprecated in version 0.4.13 and removed in version 0.5.0.
 
@@ -861,7 +861,7 @@ In order to catch all error cases, you have to have at least the clause
 The variables declared in the ``returns`` and the ``catch`` clause are only
 in scope in the block that follows.
 
-.. note::
+.. 注解::
 
     If an error happens during the decoding of the return data
     inside a try/catch-statement, this causes an exception in the currently
@@ -869,7 +869,7 @@ in scope in the block that follows.
     If there is an error during decoding of ``catch Error(string memory reason)``
     and there is a low-level catch clause, this error is caught there.
 
-.. note::
+.. 注解::
 
     If execution reaches a catch-block, then the state-changing effects of
     the external call have been reverted. If execution reaches
@@ -879,7 +879,7 @@ in scope in the block that follows.
     reverts (for example due to decoding failures as noted above or
     due to not providing a low-level catch clause).
 
-.. note::
+.. 注解::
     The reason behind a failed call can be manifold. Do not assume that
     the error message is coming directly from the called contract:
     The error might have happened deeper down in the call chain and the

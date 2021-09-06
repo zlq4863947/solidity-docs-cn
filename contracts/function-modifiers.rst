@@ -115,7 +115,7 @@ Explicit returns from a modifier or function body only leave the current
 modifier or function body. Return variables are assigned and
 control flow continues after the ``_`` in the preceding modifier.
 
-.. warning::
+.. 警告::
     In an earlier version of Solidity, ``return`` statements in functions
     having modifiers behaved differently.
 

@@ -28,19 +28,19 @@ annotation, the "data location", about where it is stored. There are three data 
 ``memory``, ``storage`` and ``calldata``. Calldata is a non-modifiable,
 non-persistent area where function arguments are stored, and behaves mostly like memory.
 
-.. note::
+.. 注解::
     If you can, try to use ``calldata`` as data location because it will avoid copies and
     also makes sure that the data cannot be modified. Arrays and structs with ``calldata``
     data location can also be returned from functions, but it is not possible to
     allocate such types.
 
-.. note::
+.. 注解::
     Prior to version 0.6.9 data location for reference-type arguments was limited to
     ``calldata`` in external functions, ``memory`` in public functions and either
     ``memory`` or ``storage`` in internal and private ones.
     Now ``memory`` and ``calldata`` are allowed in all functions regardless of their visibility.
 
-.. note::
+.. 注解::
     Prior to version 0.5.0 the data location could be omitted, and would default to different locations
     depending on the kind of variable, function type, etc., but all complex types must now give an explicit
     data location.
@@ -158,7 +158,7 @@ use ``bytes`` for arbitrary-length raw byte data and ``string`` for arbitrary-le
 string (UTF-8) data. If you can limit the length to a certain number of bytes,
 always use one of the value types ``bytes1`` to ``bytes32`` because they are much cheaper.
 
-.. note::
+.. 注解::
     If you want to access the byte-representation of a string ``s``, use
     ``bytes(s).length`` / ``bytes(s)[7] = 'x';``. Keep in mind
     that you are accessing the low-level bytes of the UTF-8 representation,
@@ -341,7 +341,7 @@ Array Members
      function called ``pop`` that you can use to remove an element from the
      end of the array. This also implicitly calls :ref:`delete<delete>` on the removed element.
 
-.. note::
+.. 注解::
     Increasing the length of a storage array by calling ``push()``
     has constant gas costs because storage is zero-initialised,
     while decreasing the length by calling ``pop()`` has a
@@ -350,11 +350,11 @@ Array Members
     it includes explicitly clearing the removed
     elements similar to calling :ref:`delete<delete>` on them.
 
-.. note::
+.. 注解::
     To use arrays of arrays in external (instead of public) functions, you need to
     activate ABI coder v2.
 
-.. note::
+.. 注解::
     In EVM versions before Byzantium, it was not possible to access
     dynamic arrays return from function calls. If you call functions
     that return dynamic arrays, make sure to use an EVM that is set to
@@ -488,7 +488,7 @@ Array slices do not have a type name which means
 no variable can have an array slices as type,
 they only exist in intermediate expressions.
 
-.. note::
+.. 注解::
     As of now, array slices are only implemented for calldata arrays.
 
 Array slices are useful to ABI-decode secondary data passed in function parameters:
@@ -608,7 +608,7 @@ Of course, you can also directly access the members of the struct without
 assigning it to a local variable, as in
 ``campaigns[campaignID].amount = 0``.
 
-.. note::
+.. 注解::
     Until Solidity 0.7.0, memory-structs containing members of storage-only types (e.g. mappings)
     were allowed and assignments like ``campaigns[campaignID] = Campaign(beneficiary, goal, 0, 0)``
     in the example above would work and just silently skip those members.

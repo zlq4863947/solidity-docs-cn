@@ -20,7 +20,7 @@ the state (i.e. if they are ``view`` or ``pure`` functions),
 because libraries are assumed to be stateless. In particular, it is
 not possible to destroy a library.
 
-.. note::
+.. 注解::
     Until version 0.4.20, it was possible to destroy libraries by
     circumventing Solidity's type system. Starting from that version,
     libraries contain a :ref:`mechanism<call-protection>` that
@@ -38,7 +38,7 @@ To realize this in the EVM, code of internal library functions
 and all functions called from therein will at compile time be included in the calling
 contract, and a regular ``JUMP`` call will be used instead of a ``DELEGATECALL``.
 
-.. note::
+.. 注解::
     The inheritance analogy breaks down when it comes to public functions.
     Calling a public library function with ``L.f()`` results in an external call (``DELEGATECALL``
     to be precise).

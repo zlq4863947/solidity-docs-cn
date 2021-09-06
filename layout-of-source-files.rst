@@ -81,7 +81,7 @@ compiler is not fixed, so that bugfix releases are still possible.
 It is possible to specify more complex rules for the compiler version,
 these follow the same syntax used by `npm <https://docs.npmjs.com/cli/v6/using-npm/semver>`_.
 
-.. note::
+.. 注解::
   Using the version pragma *does not* change the version of the compiler.
   It also *does not* enable or disable features of the compiler. It just
   instructs the compiler to check whether its version matches the one
@@ -110,7 +110,7 @@ decoding types only supported by the new encoder. The compiler can detect this
 and will issue an error. Simply enabling ``abicoder v2`` for your contract is
 enough to make the error go away.
 
-.. note::
+.. 注解::
   This pragma applies to all the code defined in the file where it is activated,
   regardless of where that code ends up eventually. This means that a contract
   whose source file is selected to compile with ABI coder v1
@@ -118,7 +118,7 @@ enough to make the error go away.
   by inheriting it from another contract. This is allowed if the new types are only
   used internally and not in external function signatures.
 
-.. note::
+.. 注解::
   Up to Solidity 0.7.4, it was possible to select the ABI coder v2
   by using ``pragma experimental ABIEncoderV2``, but it was not possible
   to explicitly select coder v1 because it was the default.
@@ -262,7 +262,7 @@ Single-line comments (``//``) and multi-line comments (``/*...*/``) are possible
     multi-line comment.
     */
 
-.. note::
+.. 注解::
   A single-line comment is terminated by any unicode line terminator
   (LF, VF, FF, CR, NEL, LS or PS) in UTF-8 encoding. The terminator is still part of
   the source code after the comment, so if it is not an ASCII symbol

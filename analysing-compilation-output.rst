@@ -186,7 +186,7 @@ the same optimized code. For example, to see if the expressions ``(a * b) / c``,
 generates the same bytecode. This can be easily done by taking a ``diff`` of the corresponding
 assembly output, after potentially stripping comments that reference the source locations.
 
-.. note::
+.. 注解::
 
    The ``--asm`` output is not designed to be machine readable. Therefore, there may be breaking
    changes on the output between minor versions of solc.

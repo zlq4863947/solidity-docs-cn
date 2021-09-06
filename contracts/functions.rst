@@ -33,7 +33,7 @@ that call them, similar to internal library functions.
         }
     }
 
-.. note::
+.. 注解::
     Functions defined outside a contract are still always executed
     in the context of a contract. They still have access to the variable ``this``,
     can call other contracts, send them Ether and destroy the contract that called them,
@@ -72,7 +72,7 @@ with two integers, you would use something like the following:
 
 Function parameters can be used as any other local variable and they can also be assigned to.
 
-.. note::
+.. 注解::
 
   An :ref:`external function<external-function-calls>` cannot accept a
   multi-dimensional array as an input
@@ -138,7 +138,7 @@ statement:
 If you use an early ``return`` to leave a function that has return variables,
 you must provide return values together with the return statement.
 
-.. note::
+.. 注解::
     You cannot return some types from non-internal functions, notably
     multi-dimensional dynamic arrays and structs. If you enable the
     ABI coder v2 by adding ``pragma abicoder v2;``
@@ -164,7 +164,7 @@ View Functions
 
 Functions can be declared ``view`` in which case they promise not to modify the state.
 
-.. note::
+.. 注解::
   If the compiler's EVM target is Byzantium or newer (default) the opcode
   ``STATICCALL`` is used when ``view`` functions are called, which enforces the state
   to stay unmodified as part of the EVM execution. For library ``view`` functions
@@ -195,13 +195,13 @@ The following statements are considered modifying the state:
         }
     }
 
-.. note::
+.. 注解::
   ``constant`` on functions used to be an alias to ``view``, but this was dropped in version 0.5.0.
 
-.. note::
+.. 注解::
   Getter methods are automatically marked ``view``.
 
-.. note::
+.. 注解::
   Prior to version 0.5.0, the compiler did not use the ``STATICCALL`` opcode
   for ``view`` functions.
   This enabled state modifications in ``view`` functions through the use of
@@ -218,7 +218,7 @@ Pure Functions
 
 Functions can be declared ``pure`` in which case they promise not to read from or modify the state.
 
-.. note::
+.. 注解::
   If the compiler's EVM target is Byzantium or newer (default) the opcode ``STATICCALL`` is used,
   which does not guarantee that the state is not read, but at least that it is not modified.
 
@@ -250,12 +250,12 @@ are reverted and that code has the option to catch the ``revert`` and not pass i
 
 This behaviour is also in line with the ``STATICCALL`` opcode.
 
-.. warning::
+.. 警告::
   It is not possible to prevent functions from reading the state at the level
   of the EVM, it is only possible to prevent them from writing to the state
   (i.e. only ``view`` can be enforced at the EVM level, ``pure`` can not).
 
-.. note::
+.. 注解::
   Prior to version 0.5.0, the compiler did not use the ``STATICCALL`` opcode
   for ``pure`` functions.
   This enabled state modifications in ``pure`` functions through the use of
@@ -263,7 +263,7 @@ This behaviour is also in line with the ``STATICCALL`` opcode.
   By using  ``STATICCALL`` for ``pure`` functions, modifications to the
   state are prevented on the level of the EVM.
 
-.. note::
+.. 注解::
   Prior to version 0.4.17 the compiler did not enforce that ``pure`` is not reading the state.
   It is a compile-time type check, which can be circumvented doing invalid explicit conversions
   between contract types, because the compiler can verify that the type of the contract does
@@ -303,7 +303,7 @@ will consume more gas than the 2300 gas stipend:
 - Calling an external function which consumes a large amount of gas
 - Sending Ether
 
-.. warning::
+.. 警告::
     Contracts that receive Ether directly (without a function call, i.e. using ``send`` or ``transfer``)
     but do not define a receive Ether function or a payable fallback function
     throw an exception, sending back the Ether (this was different
@@ -312,7 +312,7 @@ will consume more gas than the 2300 gas stipend:
     not recommended, since it would not fail on interface confusions).
 
 
-.. warning::
+.. 警告::
     A contract without a receive Ether function can receive Ether as a
     recipient of a *coinbase transaction* (aka *miner block reward*)
     or as a destination of a ``selfdestruct``.
@@ -372,14 +372,14 @@ for a brief description of the implications of this).
 Like any function, the fallback function can execute complex
 operations as long as there is enough gas passed on to it.
 
-.. warning::
+.. 警告::
     A ``payable`` fallback function is also executed for
     plain Ether transfers, if no :ref:`receive Ether function <receive-ether-function>`
     is present. It is recommended to always define a receive Ether
     function as well, if you define a payable fallback function
     to distinguish Ether transfers from interface confusions.
 
-.. note::
+.. 注解::
     If you want to decode the input data, you can check the first four bytes
     for the function selector and then
     you can use ``abi.decode`` together with the array slice syntax to
@@ -517,7 +517,7 @@ to the arguments supplied in the function call. Functions are selected as overlo
 if all arguments can be implicitly converted to the expected types. If there is not exactly one
 candidate, resolution fails.
 
-.. note::
+.. 注解::
     Return parameters are not taken into account for overload resolution.
 
 .. code-block:: solidity

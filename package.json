@@ -7,7 +7,8 @@
     "example": "examples"
   },
   "scripts": {
-    "serve": "http-server _build"
+    "build": "sh scripts/build.sh",
+    "serve": "http-server _build/html"
   },
   "repository": {
     "type": "git",

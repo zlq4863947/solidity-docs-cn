@@ -8,7 +8,7 @@ Solidity contracts can use a special form of comments to provide rich
 documentation for functions, return variables and more. This special form is
 named the Ethereum Natural Language Specification Format (NatSpec).
 
-.. note::
+.. 注解::
 
   NatSpec was inspired by `Doxygen <https://en.wikipedia.org/wiki/Doxygen>`_.
   While it uses Doxygen-style comments and tags, there is no intention to keep
@@ -50,7 +50,7 @@ for the purposes of NatSpec.
 
 The following example shows a contract and a function using all available tags.
 
-.. note::
+.. 注解::
 
   The Solidity compiler only interprets tags if they are external or
   public. You are welcome to use similar comments for your internal and
@@ -189,7 +189,7 @@ documentation using:
 
 And the output is below.
 
-.. note::
+.. 注解::
     Starting Solidity version 0.6.11 the NatSpec output also contains a ``version`` and a ``kind`` field.
     Currently the ``version`` is set to ``1`` and ``kind`` must be one of ``user`` or ``dev``.
     In the future it is possible that new versions will be introduced, deprecating older ones.

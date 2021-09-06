@@ -24,7 +24,7 @@ Multi-dimensional memory arrays are pointers to memory arrays. The length of a
 dynamic array is stored at the first slot of the array and followed by the array
 elements.
 
-.. warning::
+.. 警告::
   There are some operations in Solidity that need a temporary memory area
   larger than 64 bytes and therefore will not fit into the scratch space.
   They will be placed where the free memory points to, but given their

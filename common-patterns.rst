@@ -270,7 +270,7 @@ Automatic timed transitions
 are handled by the modifier ``timedTransitions``, which
 should be used for all functions.
 
-.. note::
+.. 注解::
     **Modifier Order Matters**.
     If atStage is combined
     with timedTransitions, make sure that you mention
@@ -281,7 +281,7 @@ Finally, the modifier ``transitionNext`` can be used
 to automatically go to the next stage when the
 function finishes.
 
-.. note::
+.. 注解::
     **Modifier May be Skipped**.
     This only applies to Solidity before version 0.4.0:
     Since modifiers are applied by simply replacing

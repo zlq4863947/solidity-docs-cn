@@ -61,7 +61,7 @@ A "runs" parameter of "1" will produce short but expensive code. In contrast, a 
 parameter will produce longer but more gas efficient code. The maximum value of the parameter
 is ``2**32-1``.
 
-.. note::
+.. 注解::
 
     A common misconception is that this parameter specifies the number of iterations of the optimizer.
     This is not true: The optimizer will always run as many times as it can still improve the code.
@@ -260,7 +260,7 @@ the AST in a semantically equivalent way. The goal is to end up either with code
 that is shorter or at least only marginally longer but will allow further
 optimization steps.
 
-.. warning::
+.. 警告::
 
     Since the optimizer is under heavy development, the information here might be outdated.
     If you rely on a certain functionality, please reach out to the team directly.

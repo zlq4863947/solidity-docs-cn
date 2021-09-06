@@ -128,7 +128,7 @@ to code as data to deploy contracts. This Yul mode is available for the commandl
         }
     }
 
-.. warning::
+.. 警告::
 
     Yul is in active development and bytecode generation is only fully implemented for the EVM dialect of Yul
     with EVM 1.0 as target.
@@ -902,7 +902,7 @@ the ``dup`` and ``swap`` instructions as well as ``jump`` instructions, labels a
 
 .. _yul-call-return-area:
 
-.. note::
+.. 注解::
   The ``call*`` instructions use the ``out`` and ``outsize`` parameters to define an area in memory where
   the return or failure data is placed. This area is written to depending on how many bytes the called contract returns.
   If it returns more data, only the first ``outsize`` bytes are written. You can access the rest of the data
@@ -1047,14 +1047,14 @@ If a verbatim bytecode block is unreachable by the control-flow,
 it can be removed.
 
 
-.. warning::
+.. 警告::
 
     During discussions about whether or not EVM improvements
     might break existing smart contracts, features inside ``verbatim``
     cannot receive the same consideration as those used by the Solidity
     compiler itself.
 
-.. note::
+.. 注解::
 
     To avoid confusion, all identifiers starting with the string ``verbatim`` are reserved
     and cannot be used for user-defined identifiers.
@@ -1081,14 +1081,14 @@ regular strings in native encoding. For code,
 
 Above, ``Block`` refers to ``Block`` in the Yul code grammar explained in the previous chapter.
 
-.. note::
+.. 注解::
 
     Data objects or sub-objects whose names contain a ``.`` can be defined
     but it is not possible to access them through ``datasize``,
     ``dataoffset`` or ``datacopy`` because ``.`` is used as a separator
     to access objects inside another object.
 
-.. note::
+.. 注解::
 
     The data object called ``".metadata"`` has a special meaning:
     It cannot be accessed from code and is always appended to the very end of the

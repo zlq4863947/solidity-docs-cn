@@ -16,7 +16,7 @@ and it is documented in its own section. This section will only cover
 how the inline assembly code can interface with the surrounding Solidity code.
 
 
-.. warning::
+.. 警告::
     Inline assembly is a way to access the Ethereum Virtual Machine
     at a low level. This bypasses several important safety
     features and checks of Solidity. You should only use it for
@@ -158,7 +158,7 @@ Local Solidity variables are available for assignments, for example:
         }
     }
 
-.. warning::
+.. 警告::
     If you access variables of a type that spans less than 256 bits
     (for example ``uint64``, ``address``, or ``bytes16``),
     you cannot make any assumptions about bits not part of the
@@ -238,7 +238,7 @@ even true for ``bytes1[]``, but not for ``bytes`` and ``string``). Multi-dimensi
 arrays are pointers to memory arrays. The length of a dynamic array is stored at the
 first slot of the array and followed by the array elements.
 
-.. warning::
+.. 警告::
     Statically-sized memory arrays do not have a length field, but it might be added later
     to allow better convertibility between statically- and dynamically-sized arrays, so
     do not rely on this.

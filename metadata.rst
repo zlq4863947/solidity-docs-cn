@@ -124,14 +124,14 @@ explanatory purposes.
       }
     }
 
-.. warning::
+.. 警告::
   Since the bytecode of the resulting contract contains the metadata hash by default, any
   change to the metadata might result in a change of the bytecode. This includes
   changes to a filename or path, and since the metadata includes a hash of all the
   sources used, a single whitespace change results in different metadata, and
   different bytecode.
 
-.. note::
+.. 注解::
     The ABI definition above has no fixed order. It can change with compiler versions.
     Starting from Solidity version 0.5.12, though, the array maintains a certain
     order.
@@ -163,13 +163,13 @@ Whereas release builds of solc use a 3 byte encoding of the version as shown
 above (one byte each for major, minor and patch version number), prerelease builds
 will instead use a complete version string including commit hash and build date.
 
-.. note::
+.. 注解::
   The CBOR mapping can also contain other keys, so it is better to fully
   decode the data instead of relying on it starting with ``0xa264``.
   For example, if any experimental features that affect code generation
   are used, the mapping will also contain ``"experimental": true``.
 
-.. note::
+.. 注解::
   The compiler currently uses the IPFS hash of the metadata by default, but
   it may also use the bzzr1 hash or some other hash in the future, so do
   not rely on this sequence to start with ``0xa2 0x64 'i' 'p' 'f' 's'``.  We

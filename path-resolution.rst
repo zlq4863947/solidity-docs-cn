@@ -46,7 +46,7 @@ For example the `Remix IDE <https://remix.ethereum.org/>`_ provides a versatile 
 lets you `import files from HTTP, IPFS and Swarm URLs or refer directly to packages in NPM registry
 <https://remix-ide.readthedocs.io/en/latest/import.html>`_.
 
-.. note::
+.. 注解::
 
     Host Filesystem Loader's file lookup is platform-dependent.
     For example backslashes in a source unit name can be interpreted as directory separators or not
@@ -192,7 +192,7 @@ An import that does not start with ``./`` or ``../`` is a *direct import*.
 After applying any :ref:`import remappings <import-remapping>` the import path simply becomes the
 source unit name.
 
-.. note::
+.. 注解::
 
     A source unit name is just an identifier and even if its value happens to look like a path, it
     is not subject to the normalization rules you would typically expect in a shell.
@@ -208,7 +208,7 @@ different in the VFS may actually result in the same file being loaded.
 For example ``/project/lib/math.sol`` and ``/project/lib/../lib///math.sol`` are considered
 completely different in the VFS even though they refer to the same file on disk.
 
-.. note::
+.. 注解::
 
     Even if an import callback ends up loading source code for two different source unit names from
     the same file on disk, the compiler will still see them as separate source units.
@@ -235,7 +235,7 @@ Such imports specify a path relative to the source unit name of the importing so
     import "./util.sol" as util;    // source unit name: lib/util.sol
     import "../token.sol" as token; // source unit name: token.sol
 
-.. note::
+.. 注解::
 
     Relative imports **always** start with ``./`` or ``../`` so ``import "util.sol"``, unlike
     ``import "./util.sol"``, is a direct import.
@@ -291,7 +291,7 @@ Here are some examples of what you can expect if they are not:
     import "../.././../util.sol";       // source unit name: util.sol
     import "../../.././../util.sol";    // source unit name: util.sol
 
-.. note::
+.. 注解::
 
     The use of relative imports containing leading ``..`` segments is not recommended.
     The same effect can be achieved in a more reliable way by using direct imports with
@@ -348,7 +348,7 @@ The normalization rules are as follows:
   `case-preserving <https://en.wikipedia.org/wiki/Case_preservation>`_ and the actual case on
   disk is different.
 
-.. note::
+.. 注解::
 
     There are situations where paths cannot be made platform-independent.
     For example on Windows the compiler can avoid using drive letters by referring to the root
@@ -366,7 +366,7 @@ Otherwise the file path remains absolute.
 This makes the conversion unambiguous and ensures that the relative path does not start with ``../``.
 The resulting file path becomes the source unit name.
 
-.. note::
+.. 注解::
 
     Prior to version 0.8.8, CLI path stripping was not performed and the only normalization applied
     was the conversion of path separators.
@@ -412,7 +412,7 @@ The compiler will look for the file in the VFS under ``dapp-bin/library/math.sol
 If the file is not available there, the source unit name will be passed to the Host Filesystem
 Loader, which will then look in ``/project/dapp-bin/library/iterable_mapping.sol``.
 
-.. warning::
+.. 警告::
 
     Information about remappings is stored in contract metadata.
     Since the binary produced by the compiler has a hash of the metadata embedded in it, any

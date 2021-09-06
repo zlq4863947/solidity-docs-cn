@@ -46,7 +46,7 @@ as it provides a number of other security benefits.
     var hash = web3.utils.sha3("message to sign");
     web3.eth.personal.sign(hash, web3.eth.defaultAccount, function () { console.log("Signed"); });
 
-.. note::
+.. 注解::
   The ``web3.eth.personal.sign`` prepends the length of the
   message to the signed data. Since we hash first, the message
   will always be exactly 32 bytes long, and thus this length
@@ -225,7 +225,7 @@ unidirectional payment channel between two parties (Alice and Bob). It involves 
     2. Alice signs messages that specify how much of that Ether is owed to the recipient. This step is repeated for each payment.
     3. Bob "closes" the payment channel, withdrawing his portion of the Ether and sending the remainder back to the sender.
 
-.. note::
+.. 注解::
   Only steps 1 and 3 require Ethereum transactions, step 2 means that the sender
   transmits a cryptographically signed message to the recipient via off chain
   methods (e.g. email). This means only two transactions are required to support
@@ -430,7 +430,7 @@ The full contract
     }
 
 
-.. note::
+.. 注解::
   The function ``splitSignature`` does not use all security
   checks. A real implementation should use a more rigorously tested library,
   such as openzepplin's `version  <https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol>`_ of this code.

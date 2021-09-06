@@ -43,7 +43,7 @@ Operators:
 For an integer type ``X``, you can use ``type(X).min`` and ``type(X).max`` to
 access the minimum and maximum value representable by the type.
 
-.. warning::
+.. 警告::
 
   Integers in Solidity are restricted to a certain range. For example, with ``uint32``, this is ``0`` up to ``2**32 - 1``.
   There are two modes in which arithmetic is performed on these types: The "wrapping" or "unchecked" mode and the "checked" mode.
@@ -74,12 +74,12 @@ to the type of the left operand is always performed at the end, but not mentione
 - ``x << y`` is equivalent to the mathematical expression ``x * 2**y``.
 - ``x >> y`` is equivalent to the mathematical expression ``x / 2**y``, rounded towards negative infinity.
 
-.. warning::
+.. 警告::
     Before version ``0.5.0`` a right shift ``x >> y`` for negative ``x`` was equivalent to
     the mathematical expression ``x / 2**y`` rounded towards zero,
     i.e., right shifts used rounding up (towards zero) instead of rounding down (towards negative infinity).
 
-.. note::
+.. 注解::
     Overflow checks are never performed for shift operations as they are done for arithmetic operations.
     Instead, the result is always truncated.
 
@@ -113,10 +113,10 @@ In Solidity, division rounds towards zero. This means that ``int256(-5) / int256
 Note that in contrast, division on :ref:`literals<rational_literals>` results in fractional values
 of arbitrary precision.
 
-.. note::
+.. 注解::
   Division by zero causes a :ref:`Panic error<assert-and-require>`. This check can **not** be disabled through ``unchecked { ... }``.
 
-.. note::
+.. 注解::
   The expression ``type(int).min / (-1)`` is the only case where division causes an overflow.
   In checked arithmetic mode, this will cause a failing assertion, while in wrapping
   mode, the value will be ``type(int).min``.
@@ -133,7 +133,7 @@ results in the same sign as its left operand (or zero) and ``a % n == -(-a % n)`
 * ``int256(-5) % int256(2) == int256(-1)``
 * ``int256(-5) % int256(-2) == int256(-1)``
 
-.. note::
+.. 注解::
   Modulo with zero causes a :ref:`Panic error<assert-and-require>`. This check can **not** be disabled through ``unchecked { ... }``.
 
 Exponentiation
@@ -143,12 +143,12 @@ Exponentiation is only available for unsigned types in the exponent. The resulti
 of an exponentiation is always equal to the type of the base. Please take care that it is
 large enough to hold the result and prepare for potential assertion failures or wrapping behaviour.
 
-.. note::
+.. 注解::
   In checked mode, exponentiation only uses the comparatively cheap ``exp`` opcode for small bases.
   For the cases of ``x**3``, the expression ``x*x*x`` might be cheaper.
   In any case, gas cost tests and the use of the optimizer are advisable.
 
-.. note::
+.. 注解::
   Note that ``0**0`` is defined by the EVM as ``1``.
 
 .. index:: ! ufixed, ! fixed, ! fixed point number
@@ -156,7 +156,7 @@ large enough to hold the result and prepare for potential assertion failures or 
 Fixed Point Numbers
 -------------------
 
-.. warning::
+.. 警告::
     Fixed point numbers are not fully supported by Solidity yet. They can be declared, but
     cannot be assigned to or from.
 
@@ -169,7 +169,7 @@ Operators:
 * Comparisons: ``<=``, ``<``, ``==``, ``!=``, ``>=``, ``>`` (evaluate to ``bool``)
 * Arithmetic operators: ``+``, ``-``, unary ``-``, ``*``, ``/``, ``%`` (modulo)
 
-.. note::
+.. 注解::
     The main difference between floating point (``float`` and ``double`` in many languages, more precisely IEEE 754 numbers) and fixed point numbers is
     that the number of bits used for the integer and the fractional part (the part after the decimal dot) is flexible in the former, while it is strictly
     defined in the latter. Generally, in floating point almost the entire space is used to represent the number, while only a small number of bits define
@@ -204,7 +204,7 @@ allowed if the contract can receive Ether, i.e., the contract either has a :ref:
 <receive-ether-function>` or a payable fallback function. Note that ``payable(0)`` is valid and is
 an exception to this rule.
 
-.. note::
+.. 注解::
     If you need a variable of type ``address`` and plan to send Ether to it, then
     declare its type as ``address payable`` to make this requirement visible. Also,
     try to make this distinction or conversion as early as possible.
@@ -213,7 +213,7 @@ Operators:
 
 * ``<=``, ``<``, ``==``, ``!=``, ``>=`` and ``>``
 
-.. warning::
+.. 警告::
     If you convert a type that uses a larger byte size to an ``address``, for example ``bytes32``, then the ``address`` is truncated.
     To reduce conversion ambiguity version 0.4.24 and higher of the compiler force you make the truncation explicit in the conversion.
     Take for example the 32-byte value ``0x111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFCCCC``.
@@ -221,7 +221,7 @@ Operators:
     You can use ``address(uint160(bytes20(b)))``, which results in ``0x111122223333444455556666777788889999aAaa``,
     or you can use ``address(uint160(uint256(b)))``, which results in ``0x777788889999AaAAbBbbCcccddDdeeeEfFFfCcCc``.
 
-.. note::
+.. 注解::
     The distinction between ``address`` and ``address payable`` was introduced with version 0.5.0.
     Also starting from that version, contracts do not derive from the address type, but can still be explicitly converted to
     ``address`` or to ``address payable``, if they have a receive or payable fallback function.
@@ -249,14 +249,14 @@ The ``transfer`` function fails if the balance of the current contract is not la
 or if the Ether transfer is rejected by the receiving account. The ``transfer`` function
 reverts on failure.
 
-.. note::
+.. 注解::
     If ``x`` is a contract address, its code (more specifically: its :ref:`receive-ether-function`, if present, or otherwise its :ref:`fallback-function`, if present) will be executed together with the ``transfer`` call (this is a feature of the EVM and cannot be prevented). If that execution runs out of gas or fails in any way, the Ether transfer will be reverted and the current contract will stop with an exception.
 
 * ``send``
 
 Send is the low-level counterpart of ``transfer``. If the execution fails, the current contract will not stop with an exception, but ``send`` will return ``false``.
 
-.. warning::
+.. 警告::
     There are some dangers in using ``send``: The transfer fails if the call stack depth is at 1024
     (this can always be forced by the caller) and it also fails if the recipient runs out of gas. So in order
     to make safe Ether transfers, always check the return value of ``send``, use ``transfer`` or even better:
@@ -281,7 +281,7 @@ Example:
     (bool success, bytes memory returnData) = address(nameReg).call(payload);
     require(success);
 
-.. warning::
+.. 警告::
     All these functions are low-level functions and should be used with care.
     Specifically, any unknown contract might be malicious and if you call it, you
     hand over control to that contract which could in turn call back into
@@ -289,7 +289,7 @@ Example:
     when the call returns. The regular way to interact with other contracts
     is to call a function on a contract object (``x.f()``).
 
-.. note::
+.. 注解::
     Previous versions of Solidity allowed these functions to receive
     arbitrary arguments and would also handle a first argument of type
     ``bytes4`` differently. These edge cases were removed in version 0.5.0.
@@ -314,7 +314,7 @@ Lastly, these modifiers can be combined. Their order does not matter:
 
 In a similar way, the function ``delegatecall`` can be used: the difference is that only the code of the given address is used, all other aspects (storage, balance, ...) are taken from the current contract. The purpose of ``delegatecall`` is to use library code which is stored in another contract. The user has to ensure that the layout of storage in both contracts is suitable for delegatecall to be used.
 
-.. note::
+.. 注解::
     Prior to homestead, only a limited variant called ``callcode`` was available that did not provide access to the original ``msg.sender`` and ``msg.value`` values. This function was removed in version 0.5.0.
 
 Since byzantium ``staticcall`` can be used as well. This is basically the same as ``call``, but will revert if the called function modifies the state in any way.
@@ -324,12 +324,12 @@ All three functions ``call``, ``delegatecall`` and ``staticcall`` are very low-l
 The ``gas`` option is available on all three methods, while the ``value`` option is only available
 on ``call``.
 
-.. note::
+.. 注解::
     It is best to avoid relying on hardcoded gas values in your smart contract code,
     regardless of whether state is read from or written to, as this can have many pitfalls.
     Also, access to gas might change in the future.
 
-.. note::
+.. 注解::
     All contracts can be converted to ``address`` type, so it is possible to query the balance of the
     current contract using ``address(this).balance``.
 
@@ -352,7 +352,7 @@ fallback function, the conversion to ``address payable`` can be done using
 You can find more information in the section about
 the :ref:`address type<address>`.
 
-.. note::
+.. 注解::
     Before version 0.5.0, contracts directly derived from the address type
     and there was no distinction between ``address`` and ``address payable``.
 
@@ -398,12 +398,12 @@ Members:
 
 * ``.length`` yields the fixed length of the byte array (read-only).
 
-.. note::
+.. 注解::
     The type ``bytes1[]`` is an array of bytes, but due to padding rules, it wastes
     31 bytes of space for each element (except in storage). It is better to use the ``bytes``
     type instead.
 
-.. note::
+.. 注解::
     Prior to version 0.8.0, ``byte`` used to be an alias for ``bytes1``.
 
 Dynamically-sized byte array
@@ -427,7 +427,7 @@ Hexadecimal literals that are between 39 and 41 digits
 long and do not pass the checksum test produce
 an error. You can prepend (for integer types) or append (for bytesNN types) zeros to remove the error.
 
-.. note::
+.. 注解::
     The mixed-case address checksum format is defined in `EIP-55 <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md>`_.
 
 .. index:: literal, literal;rational
@@ -472,10 +472,10 @@ as the right (exponent) operand are always performed
 in the ``uint256`` (for non-negative literals) or ``int256`` (for a negative literals) type,
 regardless of the type of the right (exponent) operand.
 
-.. warning::
+.. 警告::
     Division on integer literals used to truncate in Solidity prior to version 0.4.0, but it now converts into a rational number, i.e. ``5 / 2`` is not equal to ``2``, but to ``2.5``.
 
-.. note::
+.. 注解::
     Solidity has a number literal type for each rational number.
     Integer literals and rational number literals belong to number literal types.
     Moreover, all number literal expressions (i.e. the expressions that
@@ -484,7 +484,7 @@ regardless of the type of the right (exponent) operand.
     belong to the same number literal type for the rational number three.
 
 
-.. note::
+.. 注解::
     Number literal expressions are converted into a non-literal type as soon as they are used with non-literal
     expressions. Disregarding types, the value of the expression assigned to ``b``
     below evaluates to an integer. Because ``a`` is of type ``uint128``, the
@@ -523,7 +523,7 @@ Additionally, string literals also support the following escape characters:
 
 ``\xNN`` takes a hex value and inserts the appropriate byte, while ``\uNNNN`` takes a Unicode codepoint and inserts an UTF-8 sequence.
 
-.. note::
+.. 注解::
 
     Until version 0.8.0 there were three additional escape sequences: ``\b``, ``\f`` and ``\v``.
     They are commonly available in other languages but rarely needed in practice.
@@ -625,7 +625,7 @@ smallest and respectively largest value of the given enum.
         }
     }
 
-.. note::
+.. 注解::
     Enums can also be declared on the file level, outside of contract or library definitions.
 
 
@@ -715,7 +715,7 @@ External (or public) functions have the following members:
 * ``.address`` returns the address of the contract of the function.
 * ``.selector`` returns the :ref:`ABI function selector <abi_function_selector>`
 
-.. note::
+.. 注解::
   External (or public) functions used to have the additional members
   ``.gas(uint)`` and ``.value(uint)``. These were deprecated in Solidity 0.6.2
   and removed in Solidity 0.7.0. Instead use ``{gas: ...}`` and ``{value: ...}``
@@ -847,5 +847,5 @@ Another example that uses external function types:
         }
     }
 
-.. note::
+.. 注解::
     Lambda or inline functions are planned but not yet supported.

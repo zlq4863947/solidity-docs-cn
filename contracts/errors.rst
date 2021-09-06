@@ -59,7 +59,7 @@ and then used as the return data in the ``revert`` opcode.
 This means that the data consists of a 4-byte selector followed by :ref:`ABI-encoded<abi>` data.
 The selector consists of the first four bytes of the keccak256-hash of the signature of the error type.
 
-.. note::
+.. 注解::
     It is possible for a contract to revert
     with different errors of the same name or even with errors defined in different places
     that are indistinguishable by the caller. For the outside, i.e. the ABI,
@@ -73,7 +73,7 @@ Note, however, that ``Error`` is a built-in type and cannot be defined in user-s
 Similarly, a failing ``assert`` or similar conditions will revert with an error
 of the built-in type ``Panic(uint256)``.
 
-.. note::
+.. 注解::
     Error data should only be used to give an indication of failure, but
     not as a means for control-flow. The reason is that the revert data
     of inner calls is propagated back through the chain of external calls

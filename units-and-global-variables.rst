@@ -18,7 +18,7 @@ A literal number can take a suffix of ``wei``, ``gwei`` or ``ether`` to specify 
 
 The only effect of the subdenomination suffix is a multiplication by a power of ten.
 
-.. note::
+.. 注解::
     The denominations ``finney`` and ``szabo`` have been removed in version 0.7.0.
 
 .. index:: time, seconds, minutes, hours, days, weeks, years
@@ -42,7 +42,7 @@ because of `leap seconds <https://en.wikipedia.org/wiki/Leap_second>`_.
 Due to the fact that leap seconds cannot be predicted, an exact calendar
 library has to be updated by an external oracle.
 
-.. note::
+.. 注解::
     The suffix ``years`` has been removed in version 0.5.0 due to the reasons above.
 
 These suffixes cannot be applied to variables. For example, if you want to
@@ -87,12 +87,12 @@ Block and Transaction Properties
 - ``tx.gasprice`` (``uint``): gas price of the transaction
 - ``tx.origin`` (``address``): sender of the transaction (full call chain)
 
-.. note::
+.. 注解::
     The values of all members of ``msg``, including ``msg.sender`` and
     ``msg.value`` can change for every **external** function call.
     This includes calls to library functions.
 
-.. note::
+.. 注解::
     Do not rely on ``block.timestamp`` or ``blockhash`` as a source of randomness,
     unless you know what you are doing.
 
@@ -104,20 +104,20 @@ Block and Transaction Properties
     but the only guarantee is that it will be somewhere between the timestamps of two
     consecutive blocks in the canonical chain.
 
-.. note::
+.. 注解::
     The block hashes are not available for all blocks for scalability reasons.
     You can only access the hashes of the most recent 256 blocks, all other
     values will be zero.
 
-.. note::
+.. 注解::
     The function ``blockhash`` was previously known as ``block.blockhash``, which was deprecated in
     version 0.4.22 and removed in version 0.5.0.
 
-.. note::
+.. 注解::
     The function ``gasleft`` was previously known as ``msg.gas``, which was deprecated in
     version 0.4.21 and removed in version 0.5.0.
 
-.. note::
+.. 注解::
     In version 0.7.0, the alias ``now`` (for ``block.timestamp``) was removed.
 
 .. index:: abi, encoding, packed
@@ -131,7 +131,7 @@ ABI Encoding and Decoding Functions
 - ``abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)``: ABI-encodes the given arguments starting from the second and prepends the given four-byte selector
 - ``abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)``: Equivalent to ``abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)```
 
-.. note::
+.. 注解::
     These encoding functions can be used to craft data for external function calls without actually
     calling an external function. Furthermore, ``keccak256(abi.encodePacked(a, b))`` is a way
     to compute the hash of structured data (although be aware that it is possible to
@@ -186,7 +186,7 @@ Mathematical and Cryptographic Functions
 ``keccak256(bytes memory) returns (bytes32)``
     compute the Keccak-256 hash of the input
 
-.. note::
+.. 注解::
 
     There used to be an alias for ``keccak256`` called ``sha3``, which was removed in version 0.5.0.
 
@@ -209,7 +209,7 @@ Mathematical and Cryptographic Functions
 
     For further details, read `example usage <https://ethereum.stackexchange.com/questions/1777/workflow-on-signing-a-string-with-private-key-followed-by-signature-verificatio>`_.
 
-.. warning::
+.. 警告::
 
     If you use ``ecrecover``, be aware that a valid signature can be turned into a different valid signature without
     requiring knowledge of the corresponding private key. In the Homestead hard fork, this issue was fixed
@@ -219,7 +219,7 @@ Mathematical and Cryptographic Functions
     This is usually not a problem unless you require signatures to be unique or
     use them to identify items. OpenZeppelin have a `ECDSA helper library <https://docs.openzeppelin.com/contracts/2.x/api/cryptography#ECDSA>`_ that you can use as a wrapper for ``ecrecover`` without this issue.
 
-.. note::
+.. 注解::
 
     When running ``sha256``, ``ripemd160`` or ``ecrecover`` on a *private blockchain*, you might encounter Out-of-Gas. This is because these functions are implemented as "precompiled contracts" and only really exist after they receive the first message (although their contract code is hardcoded). Messages to non-existing contracts are more expensive and thus the execution might run into an Out-of-Gas error. A workaround for this problem is to first send Wei (1 for example) to each of the contracts before you use them in your actual contracts. This is not an issue on the main or test net.
 
@@ -256,17 +256,17 @@ Members of Address Types
 
 For more information, see the section on :ref:`address`.
 
-.. warning::
+.. 警告::
     You should avoid using ``.call()`` whenever possible when executing another contract function as it bypasses type checking,
     function existence check, and argument packing.
 
-.. warning::
+.. 警告::
     There are some dangers in using ``send``: The transfer fails if the call stack depth is at 1024
     (this can always be forced by the caller) and it also fails if the recipient runs out of gas. So in order
     to make safe Ether transfers, always check the return value of ``send``, use ``transfer`` or even better:
     Use a pattern where the recipient withdraws the money.
 
-.. warning::
+.. 警告::
     Due to the fact that the EVM considers a call to a non-existing contract to always succeed,
     Solidity includes an extra check using the ``extcodesize`` opcode when performing external calls.
     This ensures that the contract that is about to be called either actually exists (it contains code)
@@ -276,21 +276,21 @@ For more information, see the section on :ref:`address`.
     ``.delegatecall()``, ``.staticcall()``, ``.send()`` and ``.transfer()``) **do not** include this
     check, which makes them cheaper in terms of gas but also less safe.
 
-.. note::
+.. 注解::
    Prior to version 0.5.0, Solidity allowed address members to be accessed by a contract instance, for example ``this.balance``.
    This is now forbidden and an explicit conversion to address must be done: ``address(this).balance``.
 
-.. note::
+.. 注解::
    If state variables are accessed via a low-level delegatecall, the storage layout of the two contracts
    must align in order for the called contract to correctly access the storage variables of the calling contract by name.
    This is of course not the case if storage pointers are passed as function arguments as in the case for
    the high-level libraries.
 
-.. note::
+.. 注解::
     Prior to version 0.5.0, ``.call``, ``.delegatecall`` and ``.staticcall`` only returned the
     success condition and not the return data.
 
-.. note::
+.. 注解::
     Prior to version 0.5.0, there was a member called ``callcode`` with similar but slightly different
     semantics than ``delegatecall``.
 
@@ -316,7 +316,7 @@ Contract Related
 
 Furthermore, all functions of the current contract are callable directly including the current function.
 
-.. note::
+.. 注解::
     Prior to version 0.5.0, there was a function called ``suicide`` with the same
     semantics as ``selfdestruct``.
 

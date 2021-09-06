@@ -28,7 +28,7 @@ by the above rules, state variables from different contracts do share the same s
 The elements of structs and arrays are stored after each other, just as if they were given
 as individual values.
 
-.. warning::
+.. 警告::
     When using elements that are smaller than 32 bytes, your contract's gas usage may be higher.
     This is because the EVM operates on 32 bytes at a time. Therefore, if the element is smaller
     than that, the EVM must use more operations in order to reduce the size of the element from 32
@@ -51,7 +51,7 @@ as individual values.
     ``uint128, uint256, uint128``, as the former will only take up two slots of storage whereas the
     latter will take up three.
 
-.. note::
+.. 注解::
      The layout of state variables in storage is considered to be part of the external interface
      of Solidity due to the fact that storage pointers can be passed to libraries. This means that
      any change to the rules outlined in this section is considered a breaking change
@@ -137,7 +137,7 @@ For byte arrays that store data which is ``32`` or more bytes long, the main slo
 stored as usual in ``keccak256(p)``. This means that you can distinguish a short array from a long array
 by checking if the lowest bit is set: short (not set) and long (set).
 
-.. note::
+.. 注解::
   Handling invalidly encoded slots is currently not supported but may be added in the future.
   If you are compiling via the experimental IR-based compiler pipeline, reading an invalidly encoded
   slot results in a ``Panic(0x22)`` error.

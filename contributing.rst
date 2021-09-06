@@ -243,7 +243,7 @@ and re-run the test. It now passes again:
     syntaxTests/double_stateVariable_declaration.sol: OK
 
 
-.. note::
+.. 注解::
 
     Choose a name for the contract file that explains what it tests, e.g. ``double_variable_declaration.sol``.
     Do not put more than one contract into a single file, unless you are testing inheritance or cross-contract calls.
@@ -385,7 +385,7 @@ local slang and references, making your language as clear to all readers as poss
 * `British English spelling <https://en.oxforddictionaries.com/spelling/british-and-spelling>`_
 
 
-.. note::
+.. 注解::
 
     While the official Solidity documentation is written in English, there are community contributed :ref:`translations`
     in other languages available. Please refer to the `translation guide <https://github.com/solidity-docs/translation-guide>`_

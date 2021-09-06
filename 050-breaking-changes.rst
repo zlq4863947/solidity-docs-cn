@@ -8,7 +8,7 @@ affected code.
 For the full list check
 `the release changelog <https://github.com/ethereum/solidity/releases/tag/v0.5.0>`_.
 
-.. note::
+.. 注解::
    Contracts compiled with Solidity v0.5.0 can still interface with contracts
    and even libraries compiled with older versions without recompiling or
    redeploying them.  Changing the interfaces to include data locations and

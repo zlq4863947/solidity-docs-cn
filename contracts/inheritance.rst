@@ -293,17 +293,17 @@ that does not override.
 If you do not mark a function that overrides as ``virtual``, derived
 contracts can no longer change the behaviour of that function.
 
-.. note::
+.. 注解::
 
   Functions with the ``private`` visibility cannot be ``virtual``.
 
-.. note::
+.. 注解::
 
   Functions without implementation have to be marked ``virtual``
   outside of interfaces. In interfaces, all functions are
   automatically considered ``virtual``.
 
-.. note::
+.. 注解::
 
   Starting from Solidity 0.8.8, the ``override`` keyword is not
   required when overriding an interface function, except for the
@@ -329,7 +329,7 @@ of the variable:
         uint public override f;
     }
 
-.. note::
+.. 注解::
 
   While public state variables can override external functions, they themselves cannot
   be overridden.

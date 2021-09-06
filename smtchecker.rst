@@ -45,7 +45,7 @@ The potential warnings that the SMTChecker reports are:
 To enable the SMTChecker, you must select :ref:`which engine should run<smtchecker_engines>`,
 where the default is no engine. Selecting the engine enables the SMTChecker on all files.
 
-.. note::
+.. 注解::
 
     Prior to Solidity 0.8.4, the default way to enable the SMTChecker was via
     ``pragma experimental SMTChecker;`` and only the contracts containing the
@@ -54,7 +54,7 @@ where the default is no engine. Selecting the engine enables the SMTChecker on a
     in Solidity 0.9.0. Note also that now using the pragma even in a single file
     enables the SMTChecker for all files.
 
-.. note::
+.. 注解::
 
     The lack of warnings for a verification target represents an undisputed
     mathematical proof of correctness, assuming no bugs in the SMTChecker and
@@ -207,7 +207,7 @@ Note that in this example the SMTChecker will automatically try to prove three p
 2. ``++i`` in the second loop does not overflow.
 3. The assertion is always true.
 
-.. note::
+.. 注解::
 
     The properties involve loops, which makes it *much much* harder than the previous
     examples, so beware of loops!

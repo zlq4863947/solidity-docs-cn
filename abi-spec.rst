@@ -31,7 +31,7 @@ location specifier, i.e.
 the function name with the parenthesised list of parameter types. Parameter types are split by a single
 comma - no spaces are used.
 
-.. note::
+.. 注解::
     The return type of a function is not part of this signature. In
     :ref:`Solidity's function overloading <overload-function>` return types are not considered.
     The reason is to keep function call resolution context-independent.
@@ -77,7 +77,7 @@ The following (fixed-size) array type exists:
 
 - ``<type>[M]``: a fixed-length array of ``M`` elements, ``M >= 0``, of the given type.
 
-  .. note::
+  .. 注解::
 
       While this ABI specification can express fixed-length arrays with zero elements, they're not supported by the compiler.
 
@@ -116,7 +116,7 @@ them.
 |:ref:`struct<structs>`         |``tuple``                                                                    |
 +-------------------------------+-----------------------------------------------------------------------------+
 
-.. warning::
+.. 警告::
     Before version ``0.8.0`` enums could have more than 256 members and were represented by the
     smallest integer type just big enough to hold the value of any member.
 
@@ -530,7 +530,7 @@ i.e. ``0xcf479181``, ``uint256(0)``, ``uint256(amount)``.
 
 The error selectors ``0x00000000`` and ``0xffffffff`` are reserved for future use.
 
-.. warning::
+.. 警告::
     Never trust error data.
     The error data by default bubbles up through the chain of external calls, which
     means that a contract may receive an error not defined in any of the contracts
@@ -561,10 +561,10 @@ A function description is a JSON object with the fields:
 
 Constructor and fallback function never have ``name`` or ``outputs``. Fallback function doesn't have ``inputs`` either.
 
-.. note::
+.. 注解::
     Sending non-zero Ether to non-payable function will revert the transaction.
 
-.. note::
+.. 注解::
     The state mutability ``nonpayable`` is reflected in Solidity by not specifying
     a state mutability modifier at all.
 
@@ -591,7 +591,7 @@ Errors look as follows:
   * ``type``: the canonical type of the parameter (more below).
   * ``components``: used for tuple types (more below).
 
-.. note::
+.. 注解::
   There can be multiple errors with the same name and even with identical signature
   in the JSON array, for example if the errors originate from different
   files in the smart contract or are referenced from another smart contract.
@@ -785,7 +785,7 @@ If padding is needed, explicit type conversions can be used: ``abi.encodePacked(
 Since packed encoding is not used when calling functions, there is no special support
 for prepending a function selector. Since the encoding is ambiguous, there is no decoding function.
 
-.. warning::
+.. 警告::
 
     If you use ``keccak256(abi.encodePacked(a, b))`` and both ``a`` and ``b`` are dynamic types,
     it is easy to craft collisions in the hash value by moving parts of ``a`` into ``b`` and
@@ -815,7 +815,7 @@ is defined as follows:
 In the above, as usual, a negative number is padded by sign extension and not zero padded.
 ``bytesNN`` types are padded on the right while ``uintNN`` / ``intNN`` are padded on the left.
 
-.. warning::
+.. 警告::
 
     The encoding of a struct is ambiguous if it contains more than one dynamically-sized
     array. Because of that, always re-check the event data and do not rely on the search result

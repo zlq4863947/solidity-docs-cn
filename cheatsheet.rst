@@ -130,7 +130,7 @@ Global Variables
 - ``type(T).min`` (``T``): the minimum value representable by the integer type ``T``, see :ref:`Type Information<meta-type>`.
 - ``type(T).max`` (``T``): the maximum value representable by the integer type ``T``, see :ref:`Type Information<meta-type>`.
 
-.. note::
+.. 注解::
     Do not rely on ``block.timestamp`` or ``blockhash`` as a source of randomness,
     unless you know what you are doing.
 
@@ -142,16 +142,16 @@ Global Variables
     but the only guarantee is that it will be somewhere between the timestamps of two
     consecutive blocks in the canonical chain.
 
-.. note::
+.. 注解::
     The block hashes are not available for all blocks for scalability reasons.
     You can only access the hashes of the most recent 256 blocks, all other
     values will be zero.
 
-.. note::
+.. 注解::
     In version 0.5.0, the following aliases were removed: ``suicide`` as alias for ``selfdestruct``,
     ``msg.gas`` as alias for ``gasleft``, ``block.blockhash`` as alias for ``blockhash`` and
     ``sha3`` as alias for ``keccak256``.
-.. note::
+.. 注解::
     In version 0.7.0, the alias ``now`` (for ``block.timestamp``) was removed.
 
 .. index:: visibility, public, private, external, internal

@@ -3,76 +3,57 @@
 .. _voting:
 
 ******
-Voting
+投票合约
 ******
 
-The following contract is quite complex, but showcases
-a lot of Solidity's features. It implements a voting
-contract. Of course, the main problems of electronic
-voting is how to assign voting rights to the correct
-persons and how to prevent manipulation. We will not
-solve all problems here, but at least we will show
-how delegated voting can be done so that vote counting
-is **automatic and completely transparent** at the
-same time.
+以下合约相当复杂，但展示了 Solidity 的许多功能。它实现了一个投票合约。当然，电子投票的主要问题是如何将投票权分配给正确的人以及如何防止操纵 我们不会在这里解决所有问题，但至少我们将展示如何进行委托投票，以便同时 **自动和完全透明** 的投票计数。
 
-The idea is to create one contract per ballot,
-providing a short name for each option.
-Then the creator of the contract who serves as
-chairperson will give the right to vote to each
-address individually.
+我们的想法是为每个选票创建一个合约，为每个选项提供一个简称。
+然后担任主席的合约创建者将分别授予每个地址的投票权。
 
-The persons behind the addresses can then choose
-to either vote themselves or to delegate their
-vote to a person they trust.
+地址后面的人可以选择自己投票或将投票委托给他们信任的人。
 
-At the end of the voting time, ``winningProposal()``
-will return the proposal with the largest number
-of votes.
+在投票时间结束时， ``winingProposal()`` 将返回得票最多的提案。
 
 .. code-block:: solidity
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.0 <0.9.0;
-    /// @title Voting with delegation.
+    /// @title 委托投票
     contract Ballot {
-        // This declares a new complex type which will
-        // be used for variables later.
-        // It will represent a single voter.
+        // 这声明了一个新的复杂类型，将用于稍后的变量。
+        // 它将代表一个选民。
         struct Voter {
-            uint weight; // weight is accumulated by delegation
-            bool voted;  // if true, that person already voted
-            address delegate; // person delegated to
-            uint vote;   // index of the voted proposal
+            uint weight; // 权重，通过委托累计
+            bool voted;  // 如果为真，则表明已投票
+            address delegate; // 被委托人
+            uint vote;   // 投票提案索引
         }
 
-        // This is a type for a single proposal.
+        // 提案的接口类型
         struct Proposal {
-            bytes32 name;   // short name (up to 32 bytes)
-            uint voteCount; // number of accumulated votes
+            bytes32 name;   // 简称（最多 32 个字节）
+            uint voteCount; // 累计票数
         }
 
+        // 主席
         address public chairperson;
 
-        // This declares a state variable that
-        // stores a `Voter` struct for each possible address.
+        // 这声明了一个状态变量，用于为每个可能的地址存储一个 `Voter`。
         mapping(address => Voter) public voters;
 
-        // A dynamically-sized array of `Proposal` structs.
+        // 动态大小的 `Proposal`（提案）结构数组。
         Proposal[] public proposals;
 
-        /// Create a new ballot to choose one of `proposalNames`.
+        // 创建一个新的投票来选择一个 `proposalNames`。
         constructor(bytes32[] memory proposalNames) {
             chairperson = msg.sender;
             voters[chairperson].weight = 1;
 
-            // For each of the provided proposal names,
-            // create a new proposal object and add it
-            // to the end of the array.
+            // 为每个提供的提案名称，创建一个新的提案对象并将其添加到数组的末尾。
             for (uint i = 0; i < proposalNames.length; i++) {
-                // `Proposal({...})` creates a temporary
-                // Proposal object and `proposals.push(...)`
-                // appends it to the end of `proposals`.
+                // `Proposal({...})` 创建了一个临时的 `Proposal` 对象，
+                // 并且 `proposals.push(...)` 将它附加到 `proposals` 的末尾。
                 proposals.push(Proposal({
                     name: proposalNames[i],
                     voteCount: 0
@@ -80,38 +61,32 @@ of votes.
             }
         }
 
-        // Give `voter` the right to vote on this ballot.
-        // May only be called by `chairperson`.
+        // 给 `voter` (选民) 投票的权利.
+        // 只能被 `chairperson`（主席）调用
         function giveRightToVote(address voter) external {
-            // If the first argument of `require` evaluates
-            // to `false`, execution terminates and all
-            // changes to the state and to Ether balances
-            // are reverted.
-            // This used to consume all gas in old EVM versions, but
-            // not anymore.
-            // It is often a good idea to use `require` to check if
-            // functions are called correctly.
-            // As a second argument, you can also provide an
-            // explanation about what went wrong.
+            // 如果 `require` 执行结果为 `false`，则终止执行，回滚对所以状态和以太币余额的变更。
+            // 在旧版的EVM中会消耗的所有gas，但现在不会消耗了。
+            // 使用 `require` 来检查方法是否被正确调用，通常是一个好主意。
+            // 使用 `require` 的第二个参数，您还可以提供有关出错原因的解释。
             require(
                 msg.sender == chairperson,
-                "Only chairperson can give right to vote."
+                "只有主席才可以分配投票权。"
             );
             require(
                 !voters[voter].voted,
-                "The voter already voted."
+                "选民已经投票了。"
             );
             require(voters[voter].weight == 0);
             voters[voter].weight = 1;
         }
 
-        /// Delegate your vote to the voter `to`.
+        // 委托你的投票权给投票者 `to`。
         function delegate(address to) external {
-            // assigns reference
+            // 分配引用
             Voter storage sender = voters[msg.sender];
-            require(!sender.voted, "You already voted.");
+            require(!sender.voted, "你已经投票了。");
 
-            require(to != msg.sender, "Self-delegation is disallowed.");
+            require(to != msg.sender, "不允许自行委托。");
 
             // Forward the delegation as long as
             // `to` also delegated.

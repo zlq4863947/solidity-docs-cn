@@ -2,9 +2,9 @@
 
 .. _voting:
 
-******
+********
 投票合约
-******
+********
 
 以下合约相当复杂，但展示了 Solidity 的许多功能。它实现了一个投票合约。当然，电子投票的主要问题是如何将投票权分配给正确的人以及如何防止操纵 我们不会在这里解决所有问题，但至少我们将展示如何进行委托投票，以便同时 **自动和完全透明** 的投票计数。
 
@@ -88,39 +88,30 @@
 
             require(to != msg.sender, "不允许自行委托。");
 
-            // Forward the delegation as long as
-            // `to` also delegated.
-            // In general, such loops are very dangerous,
-            // because if they run too long, they might
-            // need more gas than is available in a block.
-            // In this case, the delegation will not be executed,
-            // but in other situations, such loops might
-            // cause a contract to get "stuck" completely.
+            // 如果被委托者 `to` 也委托了，则转发委托。
+            // 一般来说，这样的循环非常危险，因为如果它们运行时间过长，可能需要比区块中可用余额更多的费用。
+            // 一旦发生币区块余额还多费用的情况，委托将不会被执行，在其他情况下，这样的循环可能会导致合约完全 "卡住"。
             while (voters[to].delegate != address(0)) {
                 to = voters[to].delegate;
 
-                // We found a loop in the delegation, not allowed.
-                require(to != msg.sender, "Found loop in delegation.");
+                // 我们在委托中发现了一个循环，中断执行。
+                require(to != msg.sender, "在委托中找到循环。");
             }
 
-            // Since `sender` is a reference, this
-            // modifies `voters[msg.sender].voted`
+            // 因为 `sender` 是一个引用，所以实际会修改 `voters[msg.sender].voted`
             sender.voted = true;
             sender.delegate = to;
             Voter storage delegate_ = voters[to];
             if (delegate_.voted) {
-                // If the delegate already voted,
-                // directly add to the number of votes
+                // 如果被委托者已经投票，则直接增加票数
                 proposals[delegate_.vote].voteCount += sender.weight;
             } else {
-                // If the delegate did not vote yet,
-                // add to her weight.
+                // 如果被委托者还没投票，则增加他的权重
                 delegate_.weight += sender.weight;
             }
         }
 
-        /// Give your vote (including votes delegated to you)
-        /// to proposal `proposals[proposal].name`.
+        // 给提案 `proposals[proposal].name` 投票（包括委托给你的投票）。
         function vote(uint proposal) external {
             Voter storage sender = voters[msg.sender];
             require(sender.weight != 0, "Has no right to vote");
@@ -128,14 +119,11 @@
             sender.voted = true;
             sender.vote = proposal;
 
-            // If `proposal` is out of the range of the array,
-            // this will throw automatically and revert all
-            // changes.
+            // 如果 `proposal` 超出数组的范围，这将自动抛出异常并回滚所有更改。
             proposals[proposal].voteCount += sender.weight;
         }
 
-        /// @dev Computes the winning proposal taking all
-        /// previous votes into account.
+        // @dev 结合之前所有的投票，统计出最终胜出的提案
         function winningProposal() public view
                 returns (uint winningProposal_)
         {
@@ -148,9 +136,7 @@
             }
         }
 
-        // Calls winningProposal() function to get the index
-        // of the winner contained in the proposals array and then
-        // returns the name of the winner
+        // 调用 winProposal() 方法获取 proposals数组中获胜者的索引，然后返回获胜者的名字
         function winnerName() external view
                 returns (bytes32 winnerName_)
         {
@@ -159,8 +145,7 @@
     }
 
 
-Possible Improvements
+可能的改进
 =====================
 
-Currently, many transactions are needed to assign the rights
-to vote to all participants. Can you think of a better way?
+目前，需要进行很多交易才能将投票权分配给所有参与者。你能想到更好的方法吗？

@@ -1,32 +1,4 @@
-Solidity中文开发文档 v0.8.8
-========
-
-最新翻译日期: 2021-09-06
-
-.. image:: logo.svg
-    :width: 120px
-    :alt: Solidity logo
-    :align: center
-
-Solidity 是一种面向对象的高级语言，用于实现智能合约。智能合约是管理以太坊状态内账户行为的程序。
-
-Solidity 是一种 `大括号编程语言 <https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Curly-bracket_languages>`_。
-它受 C++、Python 和 JavaScript 的影响，旨在针对以太坊虚拟机 (EVM)运行智能合约。
-您可以找到有关 Solidity 受哪些语言启发的更多详细信息
-:doc:`语言影响 <language-influences>` 部分。
-
-Solidity 是静态类型的，支持继承、库和复杂的用户定义类型以及其他功能。
-
-使用 Solidity，您可以创建投票、众筹、盲拍、和多重签名钱包。
-
-部署合约时，应使用最新发布的Solidity 版本。这是为了防止破坏性变化以及定期推出新功能和错误修复。
-我们目前使用一个 0.x 版本号 `以表明版本的变化 <https://semver.org/lang/zh-CN/#spec-item-4>`_。
-
-.. 警告::
-
-  Solidity 最近发布了 0.8.x 版本，引入了很多破坏性变化。请务必阅读 :doc:`完整列表 <080-breaking-changes>`。
-
-欢迎提出改进 Solidity 或本文档的想法。
+.. include:: README.rst
 
 入门
 ---------------
@@ -84,6 +56,7 @@ Solidity 是静态类型的，支持继承、库和复杂的用户定义类型�
    :maxdepth: 2
    :caption: 基础
 
+   README.rst
    introduction-to-smart-contracts.rst
    installing-solidity.rst
    solidity-by-example.rst

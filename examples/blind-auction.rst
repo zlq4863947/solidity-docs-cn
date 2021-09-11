@@ -1,72 +1,58 @@
 .. index:: auction;blind, auction;open, blind auction, open auction
 
 *************
-Blind Auction
+盲拍
 *************
 
-In this section, we will show how easy it is to create a completely blind
-auction contract on Ethereum.  We will start with an open auction where
-everyone can see the bids that are made and then extend this contract into a
-blind auction where it is not possible to see the actual bid until the bidding
-period ends.
+在本节中，我们将展示在以太坊上创建一个完全盲目的拍卖合约是多么容易。我们将从公开拍卖开始，每个人都可以看到出价，然后将此合同扩展为盲拍卖，在竞标期结束之前无法看到实际出价。
 
 .. _simple_auction:
 
-Simple Open Auction
+简单的公开拍卖
 ===================
 
-The general idea of the following simple auction contract is that everyone can
-send their bids during a bidding period. The bids already include sending money
-/ Ether in order to bind the bidders to their bid. If the highest bid is
-raised, the previous highest bidder gets their money back.  After the end of
-the bidding period, the contract has to be called manually for the beneficiary
-to receive their money - contracts cannot activate themselves.
+以下简单拍卖合约的大体思路：每个人都可以在投标期间发送他们的投标。 出价已经包括资金/以太币以将投标人绑定到他们的出价中。如果拍卖最高价格被提高，则之前出价最高的人会收回他们的钱。投标期结束后，必须手动调用合同，受益人才能收到钱 - 合同无法自行激活。
 
 .. code-block:: solidity
 
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity ^0.8.4;
     contract SimpleAuction {
-        // Parameters of the auction. Times are either
-        // absolute unix timestamps (seconds since 1970-01-01)
-        // or time periods in seconds.
+        // 拍卖收益人
         address payable public beneficiary;
+        // 结束时间，UTC时间戳（秒单位）或以秒为单位的时间段。
         uint public auctionEndTime;
 
-        // Current state of the auction.
+        // 当前出价最高者
         address public highestBidder;
         uint public highestBid;
 
-        // Allowed withdrawals of previous bids
+        // 运行撤回之前的出价
         mapping(address => uint) pendingReturns;
 
-        // Set to true at the end, disallows any change.
-        // By default initialized to `false`.
+        // 最后设置为 true，不允许任何更改。
+        // 默认初始化为 `false`。
         bool ended;
 
-        // Events that will be emitted on changes.
+        // 最高价更新时触发事件
         event HighestBidIncreased(address bidder, uint amount);
+        // 拍卖结束时触发事件
         event AuctionEnded(address winner, uint amount);
 
-        // Errors that describe failures.
+        // 描述失败的错误。
 
-        // The triple-slash comments are so-called natspec
-        // comments. They will be shown when the user
-        // is asked to confirm a transaction or
-        // when an error is displayed.
+        // 三斜线注释是被称为 **natspec** 的注释格式。当要求用户确认交易或显示错误时，它们将显示。
 
-        /// The auction has already ended.
+        /// 拍卖已经结束。
         error AuctionAlreadyEnded();
-        /// There is already a higher or equal bid.
+        /// 已经有更高或相等的出价。
         error BidNotHighEnough(uint highestBid);
-        /// The auction has not ended yet.
+        /// 拍卖还没有结束。
         error AuctionNotYetEnded();
-        /// The function auctionEnd has already been called.
+        /// auctionEnd方法已经被调用。
         error AuctionEndAlreadyCalled();
 
-        /// Create a simple auction with `biddingTime`
-        /// seconds bidding time on behalf of the
-        /// beneficiary address `beneficiaryAddress`.
+        /// 代表受益人地址 `beneficiaryAddress` 创建一个带有 `biddingTime` 秒出价时间的简单拍卖。
         constructor(
             uint biddingTime,
             address payable beneficiaryAddress
@@ -75,27 +61,17 @@ to receive their money - contracts cannot activate themselves.
             auctionEndTime = block.timestamp + biddingTime;
         }
 
-        /// Bid on the auction with the value sent
-        /// together with this transaction.
-        /// The value will only be refunded if the
-        /// auction is not won.
+        /// 使用与此交易一起发送的价格在拍卖中出价。
+        /// 只有在没有赢得拍卖的情况下才会退还该价值。
         function bid() external payable {
-            // No arguments are necessary, all
-            // information is already part of
-            // the transaction. The keyword payable
-            // is required for the function to
-            // be able to receive Ether.
+            // 不需要任何参数，所有信息都已经是交易的一部分。
+            // 该方法需要关键字payable才能接收Ether。
 
-            // Revert the call if the bidding
-            // period is over.
+            // 如果投标期结束，则取消回滚此方法的执行。
             if (block.timestamp > auctionEndTime)
                 revert AuctionAlreadyEnded();
 
-            // If the bid is not higher, send the
-            // money back (the revert statement
-            // will revert all changes in this
-            // function execution including
-            // it having received the money).
+            // 如果出价 <= 现有最高加，则退回资产（revert 语句将回滚此方法执行中的所有更改，包括它已收到的资产）。
             if (msg.value <= highestBid)
                 revert BidNotHighEnough(highestBid);
 

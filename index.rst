@@ -57,61 +57,61 @@
    :caption: 基础
 
    README.rst
-   introduction-to-smart-contracts.rst
-   installing-solidity.rst
-   solidity-by-example.rst
+   book/introduction-to-smart-contracts.rst
+   book/installing-solidity.rst
+   book/solidity-by-example.rst
 
 .. toctree::
    :maxdepth: 2
    :caption: Language Description
 
-   layout-of-source-files.rst
-   structure-of-a-contract.rst
-   types.rst
-   units-and-global-variables.rst
-   control-structures.rst
-   contracts.rst
-   assembly.rst
-   cheatsheet.rst
-   grammar.rst
+   book/layout-of-source-files.rst
+   book/structure-of-a-contract.rst
+   book/types.rst
+   book/units-and-global-variables.rst
+   book/control-structures.rst
+   book/contracts.rst
+   book/assembly.rst
+   book/cheatsheet.rst
+   book/grammar.rst
 
 .. toctree::
    :maxdepth: 2
    :caption: Compiler
 
-   using-the-compiler.rst
-   analysing-compilation-output.rst
+   book/using-the-compiler.rst
+   book/analysing-compilation-output.rst
 
 .. toctree::
    :maxdepth: 2
    :caption: Internals
 
-   internals/layout_in_storage.rst
-   internals/layout_in_memory.rst
-   internals/layout_in_calldata.rst
-   internals/variable_cleanup.rst
-   internals/source_mappings.rst
-   internals/optimizer.rst
-   metadata.rst
-   abi-spec.rst
+   book/internals/layout_in_storage.rst
+   book/internals/layout_in_memory.rst
+   book/internals/layout_in_calldata.rst
+   book/internals/variable_cleanup.rst
+   book/internals/source_mappings.rst
+   book/internals/optimizer.rst
+   book/metadata.rst
+   book/abi-spec.rst
 
 .. toctree::
    :maxdepth: 2
    :caption: Additional Material
 
-   050-breaking-changes.rst
-   060-breaking-changes.rst
-   070-breaking-changes.rst
-   080-breaking-changes.rst
-   natspec-format.rst
-   security-considerations.rst
-   smtchecker.rst
-   resources.rst
-   path-resolution.rst
-   yul.rst
-   style-guide.rst
-   common-patterns.rst
-   bugs.rst
-   contributing.rst
-   brand-guide.rst
-   language-influences.rst
+   book/050-breaking-changes.rst
+   book/060-breaking-changes.rst
+   book/070-breaking-changes.rst
+   book/080-breaking-changes.rst
+   book/natspec-format.rst
+   book/security-considerations.rst
+   book/smtchecker.rst
+   book/resources.rst
+   book/path-resolution.rst
+   book/yul.rst
+   book/style-guide.rst
+   book/common-patterns.rst
+   book/bugs.rst
+   book/contributing.rst
+   book/brand-guide.rst
+   book/language-influences.rst

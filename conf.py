@@ -46,7 +46,7 @@ extensions = [
     'html_extra_template_renderer',
 ]
 
-a4_base_path = os.path.dirname(__file__) + '/grammar'
+a4_base_path = os.path.dirname(__file__) + '/book/grammar'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

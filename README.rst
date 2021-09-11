@@ -17,8 +17,12 @@ Solidity中文开发文档 v0.8.8
 
 - 项目地址：https://github.com/zlq4863947/solidity-docs-cn
 - 在线地址：https://solidity-docs-cn.readthedocs.io/en/latest
-- 翻译原地址：https://github.com/ethereum/solidity/tree/develop/docs
-- 翻译参考地址：https://github.com/lbc-team/solidity-doc-cn
+
+
+参考資料
+---------------
+* 翻译原地址：https://github.com/ethereum/solidity/tree/develop/docs
+* 翻译参考地址：https://github.com/lbc-team/solidity-doc-cn
 
 
 ***********************
@@ -44,3 +48,9 @@ Solidity 是静态类型的，支持继承、库和复杂的用户定义类型�
     Solidity 最近发布了 0.8.x 版本，引入了很多破坏性变化。请务必阅读 :doc:`完整列表 <080-breaking-changes>`。
 
 欢迎提出改进 Solidity 或本文档的想法。
+
+***********************
+目录
+***********************.
+
+点击此 :doc:`目录 <index>` 查看。

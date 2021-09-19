@@ -1,21 +1,14 @@
 .. index:: contract;modular, modular contract
 
 *****************
-Modular Contracts
+模块化合约
 *****************
 
-A modular approach to building your contracts helps you reduce the complexity
-and improve the readability which will help to identify bugs and vulnerabilities
-during development and code review.
-If you specify and control the behaviour or each module in isolation, the
-interactions you have to consider are only those between the module specifications
-and not every other moving part of the contract.
-In the example below, the contract uses the ``move`` method
-of the ``Balances`` :ref:`library <libraries>` to check that balances sent between
-addresses match what you expect. In this way, the ``Balances`` library
-provides an isolated component that properly tracks balances of accounts.
-It is easy to verify that the ``Balances`` library never produces negative balances or overflows
-and the sum of all balances is an invariant across the lifetime of the contract.
+构建合约的模块化方法可帮助您降低复杂性并提高可读性，这将有助于在开发和代码审查期间发现错误和漏洞。
+如果您单独指定和控制每个模块的行为，则您必须考虑的交互仅是模块规范之间的交互，而不应将它放到合约部分中。
+
+在下面的示例中，合约使用 ``Balances`` :ref:`library <libraries>` 的 ``move`` 方法来检查地址之间发送的余额是否与您期望的相符。通过这种方式，``Balances`` 库提供了一个独立的组件，可以正确跟踪账户余额。
+很容易验证 ``Balances`` 库永远不会产生负余额或溢出，并且所有余额的总和在合约的整个生命周期中都是不变的。
 
 .. code-block:: solidity
 

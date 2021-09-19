@@ -1,101 +1,72 @@
 ********************
-Micropayment Channel
+小额支付通道
 ********************
 
-In this section we will learn how to build an example implementation
-of a payment channel. It uses cryptographic signatures to make
-repeated transfers of Ether between the same parties secure, instantaneous, and
-without transaction fees. For the example, we need to understand how to
-sign and verify signatures, and setup the payment channel.
+在本节中，我们将学习如何构建支付通道的示例实现。
+它使用加密签名在同一方之间安全、即时且无交易费用地重复转移 以太币。 例如，我们需要了解如何签名和验证签名，以及设置支付通道。
 
-Creating and verifying signatures
+创建和验证签名
 =================================
 
-Imagine Alice wants to send a quantity of Ether to Bob, i.e.
-Alice is the sender and Bob is the recipient.
+想象一下 Alice 想要向 Bob 发送一定数量的 以太币，即 Alice 是发送者，而 Bob 是接收者。
 
-Alice only needs to send cryptographically signed messages off-chain
-(e.g. via email) to Bob and it is similar to writing checks.
+Alice 只需要在链外（例如通过电子邮件）向 Bob 发送加密签名的消息，这类似于写支票。
 
-Alice and Bob use signatures to authorise transactions, which is possible with smart contracts on Ethereum.
-Alice will build a simple smart contract that lets her transmit Ether, but instead of calling a function herself
-to initiate a payment, she will let Bob do that, and therefore pay the transaction fee.
+Alice 和 Bob 使用签名来授权交易，这可以通过以太坊上的智能合约实现。
+Alice 将构建一个简单的智能合约，让她转移 以太币，但她不会自己调用方法来发起支付，而是让 Bob 这样做，从而支付交易费用。
 
-The contract will work as follows:
+该合约将按以下方式运作：
 
-    1. Alice deploys the ``ReceiverPays`` contract, attaching enough Ether to cover the payments that will be made.
-    2. Alice authorises a payment by signing a message with her private key.
-    3. Alice sends the cryptographically signed message to Bob. The message does not need to be kept secret
-       (explained later), and the mechanism for sending it does not matter.
-    4. Bob claims his payment by presenting the signed message to the smart contract, it verifies the
-       authenticity of the message and then releases the funds.
+    1. Alice 部署 ``ReceiverPays`` 合约，附加足够的以太币来支付将要支付的款项。
+    2. Alice 通过使用她的私钥签署消息来授权付款。
+    3. Alice 将加密签名的消息发送给 Bob。 消息不需要保密（稍后解释），发送它的机制无关紧要。
+    4. Bob 通过将签名的消息提交给智能合约来索取他的付款，它验证消息的真实性，然后交付资金。
 
-Creating the signature
+创建签名
 ----------------------
 
-Alice does not need to interact with the Ethereum network
-to sign the transaction, the process is completely offline.
-In this tutorial, we will sign messages in the browser
-using `web3.js <https://github.com/ethereum/web3.js>`_ and
-`MetaMask <https://metamask.io>`_, using the method described in `EIP-762 <https://github.com/ethereum/EIPs/pull/712>`_,
-as it provides a number of other security benefits.
+Alice 不需要与以太坊网络交互来签署交易，整个过程是完全离线的。
+在本教程中，我们将使用 `web3.js <https://github.com/ethereum/web3.js>`_ 和 `MetaMask <https://metamask.io>`_ 在浏览器中签署消息，使用 `EIP-762 <https://github.com/ethereum/EIPs/pull/712>`_ 中描述的方法，因为它提供了许多其他安全优势。
 
 .. code-block:: javascript
 
-    /// Hashing first makes things easier
+    /// 首先哈希使事情变得更容易
     var hash = web3.utils.sha3("message to sign");
     web3.eth.personal.sign(hash, web3.eth.defaultAccount, function () { console.log("Signed"); });
 
 .. 注解::
-  The ``web3.eth.personal.sign`` prepends the length of the
-  message to the signed data. Since we hash first, the message
-  will always be exactly 32 bytes long, and thus this length
-  prefix is always the same.
+  ``web3.eth.personal.sign`` 将消息的长度添加到签名数据之前。因为我们先哈希，所以消息总是正好是 32 字节长，因此这个长度前缀总是相同的。
 
-What to Sign
+签署什么
 ------------
 
-For a contract that fulfils payments, the signed message must include:
+对于履行付款的合同，签署的消息必须包括：
 
-    1. The recipient's address.
-    2. The amount to be transferred.
-    3. Protection against replay attacks.
+    1. 收件人的地址。
+    2. 要转移的金额。
+    3. 防止重放攻击。
 
-A replay attack is when a signed message is reused to claim
-authorization for a second action. To avoid replay attacks
-we use the same technique as in Ethereum transactions themselves,
-a so-called nonce, which is the number of transactions sent by
-an account. The smart contract checks if a nonce is used multiple times.
+重放攻击是指重新使用已签名的消息来声明对第二个操作的授权。
+为了避免重放攻击，我们引入一个 **nonce** (以太坊链上交易也是使用这个方式来防止重放攻击), 它表示一个账号已经发送交易的次数。智能合约将检查 **nonce** 是否使用过。
 
-Another type of replay attack can occur when the owner
-deploys a ``ReceiverPays`` smart contract, makes some
-payments, and then destroys the contract. Later, they decide
-to deploy the ``RecipientPays`` smart contract again, but the
-new contract does not know the nonces used in the previous
-deployment, so the attacker can use the old messages again.
+当所有者部署 ``ReceiverPays`` 智能合约，进行一些付款，然后销毁合约时，可能会发生另一种类型的重放攻击。当他们决定再次部署 ``ReceiverPays`` 智能合约，新合约不知道之前部署中使用的 **nonce**，因此攻击者可以再次使用旧消息。
 
-Alice can protect against this attack by including the
-contract's address in the message, and only messages containing
-the contract's address itself will be accepted. You can find
-an example of this in the first two lines of the ``claimPayment()``
-function of the full contract at the end of this section.
+Alice 可以通过在消息中包含合约地址来防止这种攻击，并且只有在消息中包含
+合约自身地址才会被接受。您可以在本节末尾的完整合约的 ``claimPayment()`` 方法的前两行中找到这个示例。
 
-Packing arguments
+封装参数
 -----------------
 
-Now that we have identified what information to include in the signed message,
-we are ready to put the message together, hash it, and sign it. For simplicity,
-we concatenate the data. The `ethereumjs-abi <https://github.com/ethereumjs/ethereumjs-abi>`_
-library provides a function called ``soliditySHA3`` that mimics the behaviour of
-Solidity's ``keccak256`` function applied to arguments encoded using ``abi.encodePacked``.
-Here is a JavaScript function that creates the proper signature for the ``ReceiverPays`` example:
+现在我们已经确定了要在签名消息中包含哪些信息，我们就可以将消息放在一起、哈希化并签名。为简单起见，我们连接数据。 `ethereumjs-abi <https://github.com/ethereumjs/ethereumjs-abi>`_ 库提供了一个名为 ``soliditySHA3`` 的方法，它模仿了 Solidity 的 ``keccak256`` 方法的行为，该方法用于编码 ``abi.encodePacked`` 。
+
+这里有一个 **JavaScript** 方法，它为 ``ReceiverPays`` 示例创建正确的签名：
 
 .. code-block:: javascript
 
-    // recipient is the address that should be paid.
-    // amount, in wei, specifies how much ether should be sent.
-    // nonce can be any unique number to prevent replay attacks
-    // contractAddress is used to prevent cross-contract replay attacks
+    // recipient 是收款人地址。
+    // amount 是要发送的以太币数量（单位: wei）。
+    // nonce 可以是任何唯一的数字以防止重放攻击
+    // contractAddress 用于防止跨合约重放攻击
     function signPayment(recipient, amount, nonce, contractAddress, callback) {
         var hash = "0x" + abi.soliditySHA3(
             ["address", "uint256", "uint256", "address"],
@@ -105,38 +76,24 @@ Here is a JavaScript function that creates the proper signature for the ``Receiv
         web3.eth.personal.sign(hash, web3.eth.defaultAccount, callback);
     }
 
-Recovering the Message Signer in Solidity
+在 Solidity 中还原消息签名者
 -----------------------------------------
 
-In general, ECDSA signatures consist of two parameters,
-``r`` and ``s``. Signatures in Ethereum include a third
-parameter called ``v``, that you can use to verify which
-account's private key was used to sign the message, and
-the transaction's sender. Solidity provides a built-in
-function :ref:`ecrecover <mathematical-and-cryptographic-functions>` that
-accepts a message along with the ``r``, ``s`` and ``v`` parameters
-and returns the address that was used to sign the message.
+一般来说，ECDSA 签名由两个参数组成，``r`` 和 ``s``。 以太坊中的签名包含第三个名为 ``v`` 的参数，您可以使用它来验证哪个帐户的私钥签名了此消息，以及交易的发送者。 Solidity 提供了一个内置方法 :ref:`ecrecover <mathematical-and-cryptographic-functions>` ，它接受消息以及 ``r``、``s`` 和 ``v`` 参数并返回签名此消息的地址。
 
-Extracting the Signature Parameters
+提取签名参数
 -----------------------------------
 
-Signatures produced by web3.js are the concatenation of ``r``,
-``s`` and ``v``, so the first step is to split these parameters
-apart. You can do this on the client-side, but doing it inside
-the smart contract means you only need to send one signature
-parameter rather than three. Splitting apart a byte array into
-its constituent parts is a mess, so we use
-:doc:`inline assembly <assembly>` to do the job in the ``splitSignature``
-function (the third function in the full contract at the end of this section).
+web3.js 生成的签名是由 ``r``、``s`` 和 ``v`` 组合而成，所以第一步需要将这些参数分开。您可以在客户端执行此操作，但在智能合约中执行此操作意味着您只需要发送一个签名参数而不是三个。将字节数组拆分为其组成部分是非常麻烦的，因此我们使用 :doc:`inline assembly <assembly>` 来完成 `splitSignature` 方法（完整合约末尾的第三个函数）中的这部分工作）。
 
-Computing the Message Hash
+计算消息哈希
 --------------------------
 
-The smart contract needs to know exactly what parameters were signed, and so it
-must recreate the message from the parameters and use that for signature verification.
-The functions ``prefixed`` and ``recoverSigner`` do this in the ``claimPayment`` function.
+智能合约需要确切知道签署了哪些参数，因此它必须根据参数重新创建消息并将其用于签名验证。
 
-The full contract
+方法 ``prefixed`` 和 ``recoverSigner`` 在 ``claimPayment`` 方法中执行此操作。
+
+完整合约
 -----------------
 
 .. code-block:: solidity
@@ -155,7 +112,7 @@ The full contract
             require(!usedNonces[nonce]);
             usedNonces[nonce] = true;
 
-            // this recreates the message that was signed on the client
+            // 这将重新创建在客户端上签名的消息
             bytes32 message = prefixed(keccak256(abi.encodePacked(msg.sender, amount, nonce, this)));
 
             require(recoverSigner(message, signature) == owner);
@@ -163,13 +120,13 @@ The full contract
             payable(msg.sender).transfer(amount);
         }
 
-        /// destroy the contract and reclaim the leftover funds.
+        /// 销毁合约并收回剩余资金。
         function shutdown() external {
             require(msg.sender == owner);
             selfdestruct(payable(msg.sender));
         }
 
-        /// signature methods.
+        /// 签名方法
         function splitSignature(bytes memory sig)
             internal
             pure
@@ -178,11 +135,11 @@ The full contract
             require(sig.length == 65);
 
             assembly {
-                // first 32 bytes, after the length prefix.
+                // 前 32 个字节，在长度前缀之后。
                 r := mload(add(sig, 32))
-                // second 32 bytes.
+                // 第二个 32 字节。
                 s := mload(add(sig, 64))
-                // final byte (first byte of the next 32 bytes).
+                // 最后一个字节（接下来的 32 个字节的第一个字节）。
                 v := byte(0, mload(add(sig, 96)))
             }
 
@@ -199,78 +156,54 @@ The full contract
             return ecrecover(message, v, r, s);
         }
 
-        /// builds a prefixed hash to mimic the behavior of eth_sign.
+        /// 构建一个带前缀的哈希来模仿 eth_sign 的行为。
         function prefixed(bytes32 hash) internal pure returns (bytes32) {
             return keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
         }
     }
 
 
-Writing a Simple Payment Channel
+编写一个简单的支付通道
 ================================
 
-Alice now builds a simple but complete implementation of a payment
-channel. Payment channels use cryptographic signatures to make
-repeated transfers of Ether securely, instantaneously, and without transaction fees.
+Alice 现在构建了一个简单但完整的支付通道实现。支付通道使用加密签名来安全、即时且无需交易费用地重复转移以太币。
 
-What is a Payment Channel?
+什么是支付通道？
 --------------------------
 
-Payment channels allow participants to make repeated transfers of Ether
-without using transactions. This means that you can avoid the delays and
-fees associated with transactions. We are going to explore a simple
-unidirectional payment channel between two parties (Alice and Bob). It involves three steps:
+支付通道允许参与者在不使用交易的情况下重复转移以太币。这意味着您可以避免与交易相关的延迟和费用。 我们将探索两方（Alice 和 Bob）之间的简单单向支付通道。包括三个步骤：
 
-    1. Alice funds a smart contract with Ether. This "opens" the payment channel.
-    2. Alice signs messages that specify how much of that Ether is owed to the recipient. This step is repeated for each payment.
-    3. Bob "closes" the payment channel, withdrawing his portion of the Ether and sending the remainder back to the sender.
+    1. Alice为以太坊的智能合约提供资金。这"打开"了支付通道。
+    2. Alice 签署消息，指明给接收者多少以太币。每次付款都会重复此步骤。
+    3. Bob"关闭"支付通道，提取他的部分的以太币并将剩余部分发回付款人。
 
 .. 注解::
-  Only steps 1 and 3 require Ethereum transactions, step 2 means that the sender
-  transmits a cryptographically signed message to the recipient via off chain
-  methods (e.g. email). This means only two transactions are required to support
-  any number of transfers.
+  只有第 1 步和第 3 步需要以太坊交易，第 2 步意味着付款人通过链下方法（例如电子邮件）将经过加密签名的消息传输给收款人。这意味着只需要两笔交易即可支持任意金额的转移。
 
-Bob is guaranteed to receive his funds because the smart contract escrows the
-Ether and honours a valid signed message. The smart contract also enforces a
-timeout, so Alice is guaranteed to eventually recover her funds even if the
-recipient refuses to close the channel. It is up to the participants in a payment
-channel to decide how long to keep it open. For a short-lived transaction,
-such as paying an internet café for each minute of network access, the payment
-channel may be kept open for a limited duration. On the other hand, for a
-recurring payment, such as paying an employee an hourly wage, the payment channel
-may be kept open for several months or years.
+Bob 可以保证会收到他的资金，因为智能合约托管 以太币 并遵守有效的签名消息。智能合约还可以强制超时执行，因此即使收款人拒绝关闭通道，Alice 也可以保证最终收回她的资金。支付通道的参与者可以决定将其开放多长时间。对于短期交易，例如为每分钟的网络访问支付网络费用，支付通道可能会在有限的时间内保持开放。另一方面，对于经常性付款，例如向员工支付每小时工资，付款通道可能会保持开放数月或数年。
 
-Opening the Payment Channel
+开通支付通道
 ---------------------------
 
-To open the payment channel, Alice deploys the smart contract, attaching
-the Ether to be escrowed and specifying the intended recipient and a
-maximum duration for the channel to exist. This is the function
-``SimplePaymentChannel`` in the contract, at the end of this section.
+为了打开支付通道，Alice 部署了智能合约，添加了要托管的以太币，并指定了预期的收款人和通道存在的最长持续时间。这个处理是本节末尾的合约中的方法 ``SimplePaymentChannel``。
 
-Making Payments
+付款
 ---------------
 
-Alice makes payments by sending signed messages to Bob.
-This step is performed entirely outside of the Ethereum network.
-Messages are cryptographically signed by the sender and then transmitted directly to the recipient.
+Alice 通过向 Bob 发送签名消息来付款。
+此步骤完全可以在以太坊网络之外进行。
+消息由发送者加密签名，然后直接发送给接收者。
 
-Each message includes the following information:
+每条消息都包含以下信息：
 
-    * The smart contract's address, used to prevent cross-contract replay attacks.
-    * The total amount of Ether that is owed the recipient so far.
+    * 智能合约的地址，用于防止跨合约重放攻击。
+    * 到目前为需要发送给接收方的以太币总量。
 
-A payment channel is closed just once, at the end of a series of transfers.
-Because of this, only one of the messages sent is redeemed. This is why
-each message specifies a cumulative total amount of Ether owed, rather than the
-amount of the individual micropayment. The recipient will naturally choose to
-redeem the most recent message because that is the one with the highest total.
-The nonce per-message is not needed anymore, because the smart contract only
-honours a single message. The address of the smart contract is still used
-to prevent a message intended for one payment channel from being used for a different channel.
+在一系列转账结束时，支付通道仅关闭一次。
+因此，只有一条发送的消息被赎回。这就是为什么每条消息都指定了所欠以太币的累计总量，而不是单个小额支付的金额。收款人自然会选择赎回最新的消息，因为那是总数最高的消息。
+不再需要每条消息的 **nonce**，因为智能合约只接受一条消息。智能合约的地址仍然用于防止用于一个支付通道的消息被用在不同的支付通道。
 
-Here is the modified JavaScript code to cryptographically sign a message from the previous section:
+以下是修改后的 JavaScript 代码，用于对上一节中的消息进行加密签名：
 
 .. code-block:: javascript
 
@@ -289,8 +222,8 @@ Here is the modified JavaScript code to cryptographically sign a message from th
         );
     }
 
-    // contractAddress is used to prevent cross-contract replay attacks.
-    // amount, in wei, specifies how much Ether should be sent.
+    // contractAddress 用于防止跨合约重放攻击。
+    // 数量，以 wei 为单位，指定应该发送多少以太币。
 
     function signPayment(contractAddress, amount, callback) {
         var message = constructPaymentMessage(contractAddress, amount);
@@ -298,42 +231,30 @@ Here is the modified JavaScript code to cryptographically sign a message from th
     }
 
 
-Closing the Payment Channel
+关闭支付通道
 ---------------------------
 
-When Bob is ready to receive his funds, it is time to
-close the payment channel by calling a ``close`` function on the smart contract.
-Closing the channel pays the recipient the Ether they are owed and
-destroys the contract, sending any remaining Ether back to Alice. To
-close the channel, Bob needs to provide a message signed by Alice.
+当 Bob 准备好接收他的资金时，就可以通过调用智能合约上的 ``close`` 方法来关闭支付通道。
+关闭通道会向接收者支付他们所欠的以太币并销毁合约，将任何剩余的以太币发送回Alice。要关闭通道，Bob 需要提供一条由 Alice 签名的消息。
 
-The smart contract must verify that the message contains a valid signature from the sender.
-The process for doing this verification is the same as the process the recipient uses.
-The Solidity functions ``isValidSignature`` and ``recoverSigner`` work just like their
-JavaScript counterparts in the previous section, with the latter function borrowed from the ``ReceiverPays`` contract.
+智能合约必须验证消息是否包含来自发送者的有效签名。
+进行此的验证过程与收款人使用的验证过程相同。
+Solidity 方法 ``isValidSignature`` 和 ``recoverSigner`` 的工作方式与上一节中的 JavaScript 对应方法一样，后者的方法借自 ``ReceiverPays`` 合约。
 
-Only the payment channel recipient can call the ``close`` function,
-who naturally passes the most recent payment message because that message
-carries the highest total owed. If the sender were allowed to call this function,
-they could provide a message with a lower amount and cheat the recipient out of what they are owed.
+只有支付通道接收方可以调用 ``close`` 方法，他自然会接收最近的支付消息，因为该消息携带的欠款总额最高。如果允许发件人调用此函数，则他们可以提供较低金额的消息，并欺骗收件人以摆脱债务。
 
-The function verifies the signed message matches the given parameters.
-If everything checks out, the recipient is sent their portion of the Ether,
-and the sender is sent the rest via a ``selfdestruct``.
-You can see the ``close`` function in the full contract.
+该方法验证签名消息与指定参数匹配。
+如果一切正常，接收者将收到他们的一部分以太币，而其余部分则通过 ``selfdestruct`` 发回给发送者。
+您可以在完整合约中看到 ``close`` 方法。
 
-Channel Expiration
+支付通道有效期
 -------------------
 
-Bob can close the payment channel at any time, but if they fail to do so,
-Alice needs a way to recover her escrowed funds. An *expiration* time was set
-at the time of contract deployment. Once that time is reached, Alice can call
-``claimTimeout`` to recover her funds. You can see the ``claimTimeout`` function in the full contract.
+Bob 可以随时关闭支付通道，但如果他们不这样做，Alice 需要一种方法来收回她的托管资金。在合约部署时设置了 *到期* 时间。 一旦到了那个时间，Alice 就可以调用 ``claimTimeout`` 来收回她的资金。您可以在完整合约中看到 ``claimTimeout`` 方法。
 
-After this function is called, Bob can no longer receive any Ether,
-so it is important that Bob closes the channel before the expiration is reached.
+调用此方法后，Bob 将无法再接收任何 以太币，因此 Bob 在到期之前关闭通道很重要。
 
-The full contract
+完整合约
 -----------------
 
 .. code-block:: solidity
@@ -342,9 +263,9 @@ The full contract
     // SPDX-License-Identifier: GPL-3.0
     pragma solidity >=0.7.0 <0.9.0;
     contract SimplePaymentChannel {
-        address payable public sender;      // The account sending payments.
-        address payable public recipient;   // The account receiving the payments.
-        uint256 public expiration;  // Timeout in case the recipient never closes.
+        address payable public sender;      // 付款人
+        address payable public recipient;   // 收款人
+        uint256 public expiration;  // 收款人不关闭通道的超时时间
 
         constructor (address payable recipientAddress, uint256 duration)
             payable
@@ -354,9 +275,8 @@ The full contract
             expiration = block.timestamp + duration;
         }
 
-        /// the recipient can close the channel at any time by presenting a
-        /// signed amount from the sender. the recipient will be sent that amount,
-        /// and the remainder will go back to the sender
+        /// 收款人可以随时通过提供来自付款人的签名金额来关闭通道。
+        /// 收款人将收到该金额，剩余部分将返还给付款人
         function close(uint256 amount, bytes memory signature) external {
             require(msg.sender == recipient);
             require(isValidSignature(amount, signature));
@@ -365,7 +285,7 @@ The full contract
             selfdestruct(sender);
         }
 
-        /// the sender can extend the expiration at any time
+        /// 付款人可以随时延长到期时间
         function extend(uint256 newExpiration) external {
             require(msg.sender == sender);
             require(newExpiration > expiration);
@@ -373,8 +293,7 @@ The full contract
             expiration = newExpiration;
         }
 
-        /// if the timeout is reached without the recipient closing the channel,
-        /// then the Ether is released back to the sender.
+        /// 如果超时后接收方未关闭通道的情况下达到超时，则将以太币发回付款方。
         function claimTimeout() external {
             require(block.timestamp >= expiration);
             selfdestruct(sender);
@@ -387,13 +306,11 @@ The full contract
         {
             bytes32 message = prefixed(keccak256(abi.encodePacked(this, amount)));
 
-            // check that the signature is from the payment sender
+            // 检查签名是否来自付款人
             return recoverSigner(message, signature) == sender;
         }
 
-        /// All functions below this are just taken from the chapter
-        /// 'creating and verifying signatures' chapter.
-
+        /// 下面的所有方法都取自 '创建和验证签名' 一章。
         function splitSignature(bytes memory sig)
             internal
             pure
@@ -402,11 +319,11 @@ The full contract
             require(sig.length == 65);
 
             assembly {
-                // first 32 bytes, after the length prefix
+                // 前 32 个字节，在长度前缀之后。
                 r := mload(add(sig, 32))
-                // second 32 bytes
+                // 第二个 32 字节。
                 s := mload(add(sig, 64))
-                // final byte (first byte of the next 32 bytes)
+                // 最后一个字节（接下来的 32 个字节的第一个字节）。
                 v := byte(0, mload(add(sig, 96)))
             }
 
@@ -423,7 +340,7 @@ The full contract
             return ecrecover(message, v, r, s);
         }
 
-        /// builds a prefixed hash to mimic the behavior of eth_sign.
+        /// 构建一个带前缀的哈希来模仿 eth_sign 的行为。
         function prefixed(bytes32 hash) internal pure returns (bytes32) {
             return keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
         }
@@ -431,34 +348,26 @@ The full contract
 
 
 .. 注解::
-  The function ``splitSignature`` does not use all security
-  checks. A real implementation should use a more rigorously tested library,
-  such as openzepplin's `version  <https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol>`_ of this code.
+  ``splitSignature`` 方法，不使用任何安全检查。真正的实现应该使用经过更严格测试的库，例如 openzepplin 的 `version <https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/ECDSA.sol>`_ 这段代码。
 
-Verifying Payments
+验证支付
 ------------------
 
-Unlike in the previous section, messages in a payment channel aren't
-redeemed right away. The recipient keeps track of the latest message and
-redeems it when it's time to close the payment channel. This means it's
-critical that the recipient perform their own verification of each message.
-Otherwise there is no guarantee that the recipient will be able to get paid
-in the end.
+与上一节不同，支付通道中的消息不会立即兑换。收款人会跟踪最新的消息，并在需要关闭支付通道时将其赎回。这意味着收款人对每条消息的自我验证至关重要。
+否则无法保证收款人最终能够获得报付款。
 
-The recipient should verify each message using the following process:
+收款人应使用以下流程验证每条消息：
 
-    1. Verify that the contract address in the message matches the payment channel.
-    2. Verify that the new total is the expected amount.
-    3. Verify that the new total does not exceed the amount of Ether escrowed.
-    4. Verify that the signature is valid and comes from the payment channel sender.
+    1. 验证消息中的合约地址是否与支付通道匹配。
+    2. 验证最新总数是否为预期金额。
+    3. 验证最新总数不超过托管的以太币数量。
+    4. 验证签名是否有效并且来自支付通道付款人。
 
-We'll use the `ethereumjs-util <https://github.com/ethereumjs/ethereumjs-util>`_
-library to write this verification. The final step can be done a number of ways,
-and we use JavaScript. The following code borrows the ``constructPaymentMessage`` function from the signing **JavaScript code** above:
+我们将使用 `ethereumjs-util <https://github.com/ethereumjs/ethereumjs-util>`_ 库来编写此验证。最后一步可以通过多种方式完成，我们使用 JavaScript。 以下代码从上面的签名 **JavaScript 代码** 中借用了 ``constructPaymentMessage`` 方法：
 
 .. code-block:: javascript
 
-    // this mimics the prefixing behavior of the eth_sign JSON-RPC method.
+    // 这模仿了 eth_sign JSON-RPC 方法的前缀行为。
     function prefixed(hash) {
         return ethereumjs.ABI.soliditySHA3(
             ["string", "bytes32"],

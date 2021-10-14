@@ -1,7 +1,7 @@
-Solidity中文开发文档 v0.8.8
+Solidity中文开发文档 v0.8.10
 ============================
 
-**最新翻译日期: 2021-09-12**
+**最新翻译日期: 2021-10-15**
 
 .. image:: logo.png
     :alt: Solidity logo
@@ -18,7 +18,6 @@ Solidity中文开发文档 v0.8.8
 - 项目地址：https://github.com/zlq4863947/solidity-docs-cn
 - 在线地址：https://solidity-docs-cn.readthedocs.io/en/latest
 
-
 参考資料
 ---------------
 * 翻译原地址：https://github.com/ethereum/solidity/tree/develop/docs
@@ -34,7 +33,7 @@ Solidity 是一种面向对象的高级语言，用于实现智能合约。智�
 Solidity 是一种 `大括号编程语言 <https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Curly-bracket_languages>`_。
 它受 C++、Python 和 JavaScript 的影响，旨在针对以太坊虚拟机 (EVM)运行智能合约。
 您可以找到有关 Solidity 受哪些语言启发的更多详细信息
-:doc:`语言影响 <language-influences>` 部分。
+:doc:`语言影响 <book/language-influences>` 部分。
 
 Solidity 是静态类型的，支持继承、库和复杂的用户定义类型以及其他功能。
 
@@ -45,6 +44,7 @@ Solidity 是静态类型的，支持继承、库和复杂的用户定义类型�
 
 .. 警告::
 
-    Solidity 最近发布了 0.8.x 版本，引入了很多破坏性变化。请务必阅读 :doc:`完整列表 <080-breaking-changes>`。
+    Solidity 最近发布了 0.8.x 版本，引入了很多破坏性变化。请务必阅读 :doc:`重大变化列表 <book/080-breaking-changes>`。
+
 
 欢迎提出改进 Solidity 或本文档的想法。

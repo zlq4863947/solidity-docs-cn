@@ -594,7 +594,7 @@ smallest and respectively largest value of the given enum.
 .. code-block:: solidity
 
     // SPDX-License-Identifier: GPL-3.0
-    pragma solidity ^0.8.8;
+    pragma solidity ^0.8.10;
 
     contract test {
         enum ActionChoices { GoLeft, GoRight, GoStraight, SitStill }

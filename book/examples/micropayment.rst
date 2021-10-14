@@ -156,6 +156,7 @@ web3.js 生成的签名是由 ``r``、``s`` 和 ``v`` 组合而成，所以第�
             return ecrecover(message, v, r, s);
         }
 
+
         /// 构建一个带前缀的哈希来模仿 eth_sign 的行为。
         function prefixed(bytes32 hash) internal pure returns (bytes32) {
             return keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));

@@ -4,10 +4,10 @@ Host: docs.soliditylang.org
 
 Allow: /en/latest/
 Allow: /en/v0.7.6/
-Allow: /en/v0.8.8/
+Allow: /en/v0.8.10/
 Allow: /_/downloads/en/latest/
 Allow: /_/downloads/en/0.7.6/
-Allow: /_/downloads/en/0.8.8/
+Allow: /_/downloads/en/0.8.10/
 
 # Prevent documentation for the development branches and older Solidity
 # versions from showing up in search results.

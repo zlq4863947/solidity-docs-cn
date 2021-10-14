@@ -305,7 +305,7 @@ contracts can no longer change the behaviour of that function.
 
 .. 注解::
 
-  Starting from Solidity 0.8.8, the ``override`` keyword is not
+  Starting from Solidity 0.8.10, the ``override`` keyword is not
   required when overriding an interface function, except for the
   case where the function is defined in multiple bases.
 

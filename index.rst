@@ -13,7 +13,7 @@
 
 **2. 了解 Solidity**
 
-一旦您熟悉了基础知识，我们建议您阅读 :doc:`"Solidity例子" <solidity-by-example>`
+一旦您熟悉了基础知识，我们建议您阅读 :doc:`"Solidity例子" <book/solidity-by-example>`
 和“语言描述”部分，以了解语言的核心概念。
 
 **3. 安装 Solidity 编译器**

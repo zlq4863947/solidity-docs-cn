@@ -368,7 +368,7 @@ The resulting file path becomes the source unit name.
 
 .. 注解::
 
-    Prior to version 0.8.8, CLI path stripping was not performed and the only normalization applied
+    Prior to version 0.8.10, CLI path stripping was not performed and the only normalization applied
     was the conversion of path separators.
     When working with older versions of the compiler it is recommended to invoke the compiler from
     the base path and to only use relative paths on the command line.
